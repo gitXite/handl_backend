@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
 
         const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (existingUser.rows.length > 0) {
-            return res.status(400).json({ message: 'Emaill is already taken' });
+            return res.status(400).json({ message: 'Email is already taken' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,6 +29,7 @@ router.post('/register', async (req, res) => {
         );
 
         const newUser = result.rows[0];
+        console.log('New user created:', newUser);
         res.json({ message: 'User registered successfully', newUser });
     } catch (error) {
         console.error('Error registering user:', error);
