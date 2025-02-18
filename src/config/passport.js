@@ -12,17 +12,17 @@ passport.use(
             const user = result.rows[0];
 
             if (!user) {
-                console.log('Invalid email or password');
+                console.log('Login failed: incorrect email');
                 return done(null, false, { message: 'Invalid email or password' });
             }
 
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                console.log('Incorrect password');
+                console.log('Login failed: incorrect password');
                 return done(null, false, { message: 'Invalid email or password' });
             }
 
-            console.log('Login successful', user.name);
+            console.log('Login successful for:', user.name);
             return done(null, user);
         } catch (error) {
             return done(error);
@@ -38,6 +38,11 @@ passport.deserializeUser(async (id, done) => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE id =$1', [id]);
         const user = result.rows[0];
+
+        if (!user) {
+            return done(null, false);
+        }
+        
         done(null, user);
     } catch (error) {
         done(error);
