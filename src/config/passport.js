@@ -12,14 +12,14 @@ passport.use(
             const user = result.rows[0];
 
             if (!user) {
-                console.log('User not found');
-                return done(null, false, { message: 'User not found' });
+                console.log('Invalid email or password');
+                return done(null, false, { message: 'Invalid email or password' });
             }
 
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 console.log('Incorrect password');
-                return done(null, false, { message: 'Incorrect password' });
+                return done(null, false, { message: 'Invalid email or password' });
             }
 
             console.log('Login successful', user.name);
