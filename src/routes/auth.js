@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
         res.status(200).json({ message: 'User registered successfully', newUser });
     } catch (error) {
         console.error('Error registering user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -41,7 +41,9 @@ router.post('/login', (req, res, next) => {
         if (err) {
             return res.status(500).json({ message: 'Error during authentication' });
         }
-        if (!user || !match) return res.status(401).json({ message: 'Invalid email or password', info });
+        if (!user || !match) {
+            return res.status(401).json({ message: info.message || 'Invalid credentials' });
+        }
 
         req.login(user, (err) => {
             if (err) {
@@ -56,9 +58,9 @@ router.post('/login', (req, res, next) => {
 // Session route
 router.get('/session', (req, res) => {
     if (req.isAuthenticated()) {
-        res.json({ isAuthenticated: true, user: req.user });
+        return res.json({ isAuthenticated: true, user: req.user });
     } else {
-        res.json({ isAuthenticated: false });
+        return res.json({ isAuthenticated: false });
     }
 });
 
