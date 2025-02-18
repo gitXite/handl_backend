@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
 
         const newUser = result.rows[0];
         console.log('New user created:', newUser);
-        res.status(200).json({ message: 'User registered successfully', newUser });
+        res.status(201).json({ message: 'User registered successfully', newUser });
     } catch (error) {
         console.error('Error registering user:', error);
         return res.status(500).json({ message: 'Internal server error' });
@@ -41,7 +41,7 @@ router.post('/login', (req, res, next) => {
         if (err) {
             return res.status(500).json({ message: 'Error during authentication' });
         }
-        if (!user || !match) {
+        if (!user) {
             return res.status(401).json({ message: info.message || 'Invalid credentials' });
         }
 
@@ -66,7 +66,7 @@ router.get('/session', (req, res) => {
 
 // Logout route
 router.post('/logout', (req, res) => {
-    if (!req.session || !req.session.user) {
+    if (!req.isAuthenticated()) {
         return res.status(400).json({ message: 'No user logged in' });
     }
     
