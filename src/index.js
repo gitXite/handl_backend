@@ -11,9 +11,6 @@ require('./config/passport');
 const app = express();
 const port = process.env.PORT || 5000;
 
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
-
 // CORS configuration
 app.use(cors({
     origin: 'http://localhost:3000',
