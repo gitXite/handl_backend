@@ -7,7 +7,6 @@ const router = express.Router();
 
 // Register route
 router.post('/register', async (req, res) => {
-    console.log('Register route hit');
     try {
         const { name, email, password } = req.body;
 
@@ -47,6 +46,15 @@ router.post('/login', (req, res, next) => {
             return res.json({ message: 'Login successful', user });
         });
     })(req, res, next);
+});
+
+// Session route
+router.get('/session', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({ isAuthenticated: true, user: req.user });
+    } else {
+        res.json({ isAuthenticated: false });
+    }
 });
 
 // Logout route
