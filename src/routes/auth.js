@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
 
         const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (existingUser.rows.length > 0) {
-            return res.status(400).json({ message: 'Email is already taken' });
+            return res.status(400).json({ message: 'Account already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
 
         const newUser = result.rows[0];
         console.log('New user created:', newUser);
-        res.json({ message: 'User registered successfully', newUser });
+        res.status(200).json({ message: 'User registered successfully', newUser });
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -38,12 +38,17 @@ router.post('/register', async (req, res) => {
 // Login route
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(401).json({ message: 'Unauthorized', info });
+        if (err) {
+            return res.status(500).json({ message: 'Error during authentication' });
+        }
+        if (!user || !match) return res.status(401).json({ message: 'Invalid email or password', info });
 
-        req.logIn(user, (err) => {
-            if (err) return next(err);
-            return res.json({ message: 'Login successful', user });
+        req.login(user, (err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error logging in' });
+            }
+            
+            return res.status(200).json({ message: 'Login successful', user });
         });
     })(req, res, next);
 });
