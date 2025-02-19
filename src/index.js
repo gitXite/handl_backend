@@ -25,22 +25,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Session setup
-app.use(
-    session({
+app.use(session({
         secret: process.env.SESSION_SECRET,
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         cookie: {
             secure: false,
             httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 24,
-        },
-    })
-);
+            sameSite: 'lax',
+            path: '/',
+            domain: 'localhost',
+            maxAge: 24 * 60 * 60 * 1000,
+        }
+    }));
 
 // Init passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+    console.log('Middleware - Incoming request:', req.method, req.url);
+    console.log('Middleware - Session:', req.session);
+    console.log('Middleware - Cookies recieved:', req.cookies);
+    console.log('Middleware - User: ', req.user);
+    next();
+});
 
 // Routes
 app.use('/auth', authRoutes);

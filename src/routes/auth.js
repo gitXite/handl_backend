@@ -44,6 +44,9 @@ router.post('/login', (req, res, next) => {
         if (!user) {
             return res.status(401).json({ message: info.message || 'Invalid credentials' });
         }
+        if (req.isAuthenticated()) {
+            return res.status(400).json({ message: 'Already logged in' });
+        }
 
         req.login(user, (err) => {
             if (err) {
@@ -57,8 +60,12 @@ router.post('/login', (req, res, next) => {
 
 // Session route
 router.get('/session', (req, res) => {
+    console.log('Session api called');
+    console.log('Session data:', req.session);
+    console.log('User in request:', req.user);
+
     if (req.isAuthenticated()) {
-        return res.json({ isAuthenticated: true, user: req.user });
+        return res.json({ isAuthenticated: true, user: req.name });
     } else {
         return res.json({ isAuthenticated: false });
     }

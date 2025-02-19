@@ -31,7 +31,10 @@ passport.use(
 );
 
 // Store user ID in session
-passport.serializeUser((user, done) => done(null, user.id));
+passport.serializeUser((user, done) => {
+    console.log('Serializing User:', user.id);
+    done(null, user.id);
+});
 
 // Retrieve user from ID
 passport.deserializeUser(async (id, done) => {
@@ -43,8 +46,10 @@ passport.deserializeUser(async (id, done) => {
             return done(null, false);
         }
         
+        console.log('Deserializing User:', user);
         done(null, user);
     } catch (error) {
-        done(error);
+        console.error('Error deserializing user:', error);
+        done(error, null);
     }
 });
