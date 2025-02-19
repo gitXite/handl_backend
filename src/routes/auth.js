@@ -60,10 +60,6 @@ router.post('/login', (req, res, next) => {
 
 // Session route
 router.get('/session', (req, res) => {
-    console.log('Session api called');
-    console.log('Session data:', req.session);
-    console.log('User in request:', req.user);
-
     if (req.isAuthenticated()) {
         return res.json({ isAuthenticated: true, user: req.name });
     } else {
