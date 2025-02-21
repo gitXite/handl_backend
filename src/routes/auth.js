@@ -1,8 +1,8 @@
 const express = require('express');
+const router = express.Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const pool = require('../config/db');
-const router = express.Router();
 const authController = require('../controllers/authController');
 
 
