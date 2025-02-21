@@ -10,27 +10,7 @@ const authController = require('../controllers/authController');
 router.post('/register', authController.registerUser);
 
 // Login api route
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error during authentication' });
-        }
-        if (!user) {
-            return res.status(401).json({ message: info.message || 'Invalid credentials' });
-        }
-        if (req.isAuthenticated()) {
-            return res.status(400).json({ message: 'Already logged in' });
-        }
-
-        req.login(user, (err) => {
-            if (err) {
-                return res.status(500).json({ message: 'Error logging in' });
-            }
-            
-            return res.status(200).json({ message: 'Login successful', user });
-        });
-    })(req, res, next);
-});
+router.post('/login', authController.loginUser);
 
 // Session api route
 router.get('/session', (req, res) => {
