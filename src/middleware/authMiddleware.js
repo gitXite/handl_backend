@@ -1,6 +1,11 @@
-exports.ensureAuthenticated = (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
         res.status(401).json({ message: 'Unauthorized' });
     }
     next();
+};
+
+
+module.exports = {
+    isAuthenticated
 };
