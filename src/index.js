@@ -30,11 +30,11 @@ app.use(session({
         resave: false,
         saveUninitialized: false,
         cookie: {
+            path: '/',
+            domain: 'localhost',
             secure: false,
             httpOnly: true,
             sameSite: 'lax',
-            path: '/',
-            domain: 'localhost',
             maxAge: 24 * 60 * 60 * 1000,
         }
     }));
@@ -43,6 +43,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Global logging for debug
 app.use((req, res, next) => {
     console.log('Middleware - Incoming request:', req.method, req.url);
     console.log('Middleware - Session:', req.session);
