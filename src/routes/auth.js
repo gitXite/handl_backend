@@ -5,7 +5,7 @@ const pool = require('../db/db');
 const router = express.Router();
 
 
-// Register route
+// Register api route
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login route
+// Login api route
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
@@ -58,7 +58,7 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-// Session route
+// Session api route
 router.get('/session', (req, res) => {
     if (req.isAuthenticated()) {
         return res.json({ isAuthenticated: true, user: req.name });
@@ -67,7 +67,7 @@ router.get('/session', (req, res) => {
     }
 });
 
-// Logout route
+// Logout api route
 router.post('/logout', (req, res) => {
     if (!req.isAuthenticated()) {
         return res.status(400).json({ message: 'No user logged in' });
