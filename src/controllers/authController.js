@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
 };
 
 // Controller for user login
-const loginUser = async (req, res, next) => {
+const loginUser = (req, res, next) => {
     passport.authenticate('local', (err, user, info) =>  {
         if (err) {
             return res.status(500).json({ message: 'Error during authentication' });
