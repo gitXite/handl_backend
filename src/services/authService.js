@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const pool = require('../config.db');
 
-
-// Services for register api route
+// Authorization service functions
+//
+// Check if the user already exists
 const checkIfUserExists = async (email) => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -12,6 +13,7 @@ const checkIfUserExists = async (email) => {
     }
 };
 
+// Hash the user password
 const hashPassword = async (password) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -21,6 +23,7 @@ const hashPassword = async (password) => {
     }
 };
 
+// Store the user on the database
 const registerUser = async (name, email, hashedPassword) => {
     try {
         const result = await pool.query(
@@ -33,9 +36,23 @@ const registerUser = async (name, email, hashedPassword) => {
     }
 };
 
+// Validate password
+const validatePassword = async (password, hashedPassword) => {
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    return isMatch;
+};
+
+// Fetch user by email
+const getUserByEmail = async (email) => {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    return result.rows[0];
+};
+
 
 module.exports = {
     checkIfUserExists,
     hashPassword,
-    registerUser
+    registerUser,
+    validatePassword,
+    getUserByEmail,
 };
