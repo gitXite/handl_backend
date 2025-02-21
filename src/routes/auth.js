@@ -16,20 +16,7 @@ router.post('/login', authController.loginUser);
 router.get('/session', sessionController.checkSession);
 
 // Logout api route
-router.post('/logout', (req, res) => {
-    if (!req.isAuthenticated()) {
-        return res.status(400).json({ message: 'No user logged in' });
-    }
-    
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error destroying session' });
-        }
-        res.clearCookie('connect.sid', { path: '/' });
-        console.log('Logged out successfully');
-        res.status(200).json({ message: 'Logged out successfully' });
-    });
-});
+router.post('/logout', sessionController.logoutUser);
 
 
 module.exports = router;
