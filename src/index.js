@@ -14,10 +14,8 @@ const port = process.env.PORT || 5000;
 // CORS configuration
 app.use(cors({
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedMethods: ['Content-Type', 'Authorization'],
     credentials: true,
-    preflightContinue: false,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
 // Middleware
