@@ -13,13 +13,7 @@ router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
 
 // Session api route
-router.get('/session', (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.json({ isAuthenticated: true, user: req.name });
-    } else {
-        return res.json({ isAuthenticated: false });
-    }
-});
+router.get('/session', sessionController.checkSession);
 
 // Logout api route
 router.post('/logout', (req, res) => {
