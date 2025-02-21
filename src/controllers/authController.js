@@ -56,8 +56,14 @@ const loginUser = (req, res, next) => {
     }(req, res, next);
 };
 
+// Get user profile
+const getProfile = (req, res) => {
+    res.status(200).json({ message: 'Welcome to your profile' });
+};
+
 
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getProfile
 };
