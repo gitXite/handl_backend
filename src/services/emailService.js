@@ -9,7 +9,9 @@ const sendConfirmationEmail = async (userEmail, token) => {
         let transporter;
         if (process.env.NODE_ENV === 'production') {
             transporter = nodemailer.createTransport({
-            service: 'Gmail',
+            host: 'mail.spacemail.com',
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS,
@@ -49,7 +51,9 @@ const sendConfirmationEmail = async (userEmail, token) => {
 const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
     try {
         const transporter = nodemailer.createTransport({
-        service: 'Gmail',
+        host: 'mail.spacemail.com',
+        port: 465,
+        secure: true,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
