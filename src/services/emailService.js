@@ -29,8 +29,9 @@ const sendConfirmationEmail = async (userEmail, token) => {
     const mailOptions = {
         from: process.env.EMAIL_USER || 'test@ethereal.email',
         to: userEmail,
+        replyTo: process.env.EMAIL_CONTACT,
         subject: 'Confirm your Email',
-        text: `Welcome to HANDL!\n\nClick the link to confirm your email: https://handl.dev/auth/confirm-email?token=${token}\nIf you encounter any problems, please let us know at support@handl.dev\n\nRegards, Daniel\nHANDL`,
+        text: `Welcome to HANDL!\n\nClick the link to confirm your email: https://handl.dev/auth/confirm-email?token=${token}\nIf you encounter any problems, please let us know!\n\nRegards, Daniel\nHANDL`,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -39,7 +40,29 @@ const sendConfirmationEmail = async (userEmail, token) => {
     }
 };
 
+// Send emails from contact page
+const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_CONTACT,
+        replyTo: userEmail,
+        subject: `${userName} - ${userSubject}`,
+        text: userText,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
 
 module.exports = {
     sendConfirmationEmail,
+    sendContactEmail,
 }
