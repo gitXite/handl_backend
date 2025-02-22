@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const pool = require('../config.db');
+const crypto = require('crypto');
 
 // Authorization service functions
 // Register
@@ -25,7 +26,7 @@ const hashPassword = async (password) => {
 const registerUser = async (name, email, hashedPassword) => {
     try {
         const result = await pool.query(
-            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email', 
+            'INSERT INTO users (name, email, password, email_token, email_verified) VALUES ($1, $2, $3, NULL, false) RETURNING id, name, email', 
             [name, email, hashedPassword]
         );
         return result.rows[0];
@@ -46,6 +47,23 @@ const getUserByEmail = async (email) => {
     return result.rows[0];
 };
 
+// Email confirmation
+// Email token generation
+const storeEmailToken = async (userId) => {
+    const token = crypto.randomBytes(32).toString('hex');
+    await pool.query('UPDATE users SET email_token = $1 WHERE id = $2', [token, userId]);
+    return token;
+};
+// Verify user token
+const verifyUserByToken = async (token) => {
+    const result = await pool.query('SELECT id FROM users WHERE email_token = $1 AND email_verified = false', [token]);
+
+    if (result.rowCount === 0) return null;
+
+    await pool.query('UPDATE users SET email_verified = true, email_token = NULL WHERE id = $1', [result.rows[0].id]);
+    return result.rows[0].id;
+};
+
 
 module.exports = {
     checkIfUserExists,
@@ -53,4 +71,6 @@ module.exports = {
     registerUser,
     validatePassword,
     getUserByEmail,
+    storeEmailToken,
+    verifyUserByToken,
 };
