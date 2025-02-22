@@ -6,7 +6,7 @@ const contactEmail = async (req, res) => {
     const { name, email, subject, message } = req.body;
     
     if (!name || !email || !subject || !message) {
-        res.status(400).json({ message: 'All fields must be filled out' });
+        return res.status(400).json({ message: 'All fields must be filled out' });
     }
     
     try {
