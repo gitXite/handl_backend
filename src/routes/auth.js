@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const bcrypt = require('bcrypt');
-const pool = require('../config/db');
+
 const authController = require('../controllers/authController');
 const sessionController = require('../controllers/sessionController');
 
 
 // Register api route
 router.post('/register', authController.registerUser);
+// Confirm email api route
+router.get('/confirm-email', authController.confirmEmail);
 
 // Login api route
 router.post('/login', authController.loginUser);
