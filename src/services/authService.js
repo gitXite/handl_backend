@@ -49,9 +49,9 @@ const getUserByEmail = async (email) => {
 
 // Email confirmation
 // Email token generation
-const storeEmailToken = async (userId) => {
+const storeEmailToken = async (newUser) => {
     const token = crypto.randomBytes(32).toString('hex');
-    await pool.query('UPDATE users SET email_token = $1 WHERE id = $2', [token, userId]);
+    await pool.query('UPDATE users SET email_token = $1 WHERE id = $2', [token, newUser]);
     return token;
 };
 // Verify user token
