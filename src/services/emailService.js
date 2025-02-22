@@ -4,7 +4,7 @@ const pool = require('../config/db');
 // Email service functions
 //
 // Confirmation email
-async function sendConfirmationEmail(userEmail, token) {
+const sendConfirmationEmail = async (userEmail, token) => {
     const transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -21,7 +21,7 @@ async function sendConfirmationEmail(userEmail, token) {
     };
 
     await transporter.sendMail(mailOptions);
-}
+};
 
 
 module.exports = {
