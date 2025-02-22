@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const authController = require('../controllers/authController');
 
 
-// Profile api route
+// Protected profile api route
 router.get('/profile', authMiddleware.isAuthenticated, authController.getProfile);
 
 
