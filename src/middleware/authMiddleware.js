@@ -1,9 +1,7 @@
 
-
-
 const isAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
     next();
 };

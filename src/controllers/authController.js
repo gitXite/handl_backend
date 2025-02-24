@@ -14,27 +14,12 @@ const registerUser = async (req, res) => {
     }
 
     try {
-        // Check if user already exists
-        const userExists = await authService.checkIfUserExists(email);
-        if (userExists) {
-            return res.status(400).json({ message: 'Account already exists' });
-        }
-
-        // Hash the password
-        const hashedPassword = await authService.hashPassword(password);
-        // Register the user
-        const newUser = await authService.registerUser(name, email, hashedPassword);
-        // Store token
-        const token = await authService.storeEmailToken(newUser);
-
-        // Send confirmation email
-        await emailService.sendConfirmationEmail(email, token);
-
-        // Return success response
-        return res.status(201).json({ message: 'User registered successfully! Check your email for confirmation', newUser });
+        // Register the user via main service method
+        const newUser = await authService.registerUser(name, email, password);
+        res.status(201).json({ message: 'User registered successfully! Check your email for confirmation'});
     } catch (error) {
         console.error('Error during registration:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -56,9 +41,10 @@ const loginUser = (req, res, next) => {
                 return res.status(500).json({ message: 'Error logging in' });
             }
 
-            return res.status(200).json({ message: 'Login successful', user });
+            console.log('Session after login:', req.session);
+            res.status(200).json({ message: 'Login successful', user });
         });
-    }, (req, res, next));
+    })(req, res, next);
 };
 
 // Get user profile

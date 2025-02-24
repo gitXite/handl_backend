@@ -1,22 +1,20 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
-const pool = require('./db');
+const authService = require('../services/authService');
 
 // Passport local strategy
 passport.use(
     new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
         try {
             console.log('Login attempt for:', email);
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-            const user = result.rows[0];
+            const user = await authService.getUserByEmail(email);
 
             if (!user) {
                 console.log('Login failed: incorrect email');
                 return done(null, false, { message: 'Invalid email or password' });
             }
 
-            const isMatch = await bcrypt.compare(password, user.password);
+            const isMatch = await authService.validatePassword(password, user.password);
             if (!isMatch) {
                 console.log('Login failed: incorrect password');
                 return done(null, false, { message: 'Invalid email or password' });
@@ -39,12 +37,11 @@ passport.serializeUser((user, done) => {
 // Retrieve user from ID
 passport.deserializeUser(async (id, done) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE id =$1', [id]);
-        const user = result.rows[0];
+        const user = await authService.getUserById(id);
 
-        if (!user) {
-            return done(null, false);
-        }
+        // if (!user) {
+        //     return done(null, false);
+        // }
         
         console.log('Deserializing User:', user);
         done(null, user);
@@ -53,3 +50,5 @@ passport.deserializeUser(async (id, done) => {
         done(error, null);
     }
 });
+
+module.exports = passport;

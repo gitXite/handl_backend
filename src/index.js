@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 const cors = require('cors');
 const passport = require('passport');
 const pool = require('./config/db');
@@ -24,16 +25,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session setup
 app.use(session({
+        store: new pgSession({ pool }),
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
         cookie: {
-            path: '/',
-            domain: '127.0.0.1',
             secure: false,
             httpOnly: true,
             sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 1000 * 60 * 60 * 24 // 24 hours
         }
     }));
 

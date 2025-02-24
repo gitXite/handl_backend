@@ -33,12 +33,12 @@ const sendConfirmationEmail = async (userEmail, token) => {
             to: userEmail,
             replyTo: process.env.EMAIL_CONTACT,
             subject: 'Confirm your Email',
-            text: `Welcome to HANDL!\n\nClick the link to confirm your email: https://handl.dev/auth/confirm-email?token=${token}\nIf you encounter any problems, please let us know!\n\nRegards, Daniel\nHANDL`,
+            text: `Welcome to HANDL!\n\nClick the link to confirm your email:\nhttps://handl.dev/auth/confirm-email?token=${token}\nIf you encounter any problems, please let us know!\n\nRegards, Daniel\nHANDL`,
         };
     
         const info = await transporter.sendMail(mailOptions);
         if (process.env.NODE_ENV !== 'production') {
-            console.log('Test email preview URL:', nodemailer.getTestMessangerUrl(info));
+            console.log('Test email preview URL:', nodemailer.getTestMessageUrl(info));
         }
     } catch (error) {
         console.error('Error sending confirmation email:', error);
