@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const pool = require('../config/db');
 
 // Email service functions
 //

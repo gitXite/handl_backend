@@ -58,7 +58,7 @@ const loginUser = (req, res, next) => {
 
             return res.status(200).json({ message: 'Login successful', user });
         });
-    }(req, res, next);
+    }, (req, res, next));
 };
 
 // Get user profile

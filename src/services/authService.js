@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const pool = require('../config.db');
+const pool = require('../config/db');
 const crypto = require('crypto');
 
 // Authorization service functions
