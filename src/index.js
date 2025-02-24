@@ -13,8 +13,9 @@ const port = process.env.PORT || 5000;
 
 // CORS configuration
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://127.0.0.1:3000',
     credentials: true,
+    preflightContinue: false,
 }));
 
 // Middleware
@@ -28,7 +29,7 @@ app.use(session({
         saveUninitialized: false,
         cookie: {
             path: '/',
-            domain: 'localhost',
+            domain: '127.0.0.1',
             secure: false,
             httpOnly: true,
             sameSite: 'lax',
