@@ -5,9 +5,9 @@ const emailService = require('../services/emailService');
 
 // Authorization service helper functions
 // Check if the user already exists
-const checkIfUserExists = async (email) => {
+const checkIfUserExists = async (client, email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
         return result.rows.length > 0;
     } catch (error) {
         throw new Error('Database error during existence check');
@@ -23,10 +23,17 @@ const hashPassword = async (password) => {
     }
 };
 // Email token generation
-const storeEmailToken = async (newUser) => {
+const storeEmailToken = async (client, newUser) => {
     const token = crypto.randomBytes(32).toString('hex');
-    await pool.query('UPDATE users SET email_token = $1 WHERE id = $2', [token, newUser.id]);
-    return token;
+    console.log('Generated token:', token);
+    try {
+        const result = await client.query('UPDATE users SET email_token = $1 WHERE id = $2', [token, newUser.id]);
+        console.log('Rows affected:', result.rowCount);
+        return token;
+    } catch (error) {
+        console.error('Error executing query', error);
+        throw error;
+    }
 };
 
 // Main register service function
@@ -37,7 +44,7 @@ const registerUser = async (name, email, password) => {
         await client.query('BEGIN'); // Start a transaction
 
         // Check if the user already exists
-        const userExists = await checkIfUserExists(email);
+        const userExists = await checkIfUserExists(client, email);
         if (userExists) {
             throw new Error('Account already exists');
         }
@@ -53,7 +60,7 @@ const registerUser = async (name, email, password) => {
         const newUser = insertResult.rows[0];
 
         // Store email token
-        const token = storeEmailToken(newUser);
+        const token = await storeEmailToken(client, newUser);
 
         // Send confirmation email
         await emailService.sendConfirmationEmail(email, token);
@@ -84,6 +91,7 @@ const getUserByEmail = async (email) => {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     return result.rows[0];
 };
+// Deserialize user
 const getUserById = async (id) => {
     const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
     return result.rows[0];

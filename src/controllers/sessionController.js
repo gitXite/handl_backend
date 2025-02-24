@@ -1,5 +1,3 @@
-
-
 // Controllers for session management
 //
 // Check if session is authenticated

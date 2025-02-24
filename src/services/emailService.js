@@ -8,12 +8,12 @@ const sendConfirmationEmail = async (userEmail, token) => {
         let transporter;
         if (process.env.NODE_ENV === 'production') {
             transporter = nodemailer.createTransport({
-            host: 'mail.spacemail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
+                host: 'mail.spacemail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
             },
         });
         } else {
@@ -33,7 +33,13 @@ const sendConfirmationEmail = async (userEmail, token) => {
             to: userEmail,
             replyTo: process.env.EMAIL_CONTACT,
             subject: 'Confirm your Email',
-            text: `Welcome to HANDL!\n\nClick the link to confirm your email:\nhttps://handl.dev/auth/confirm-email?token=${token}\nIf you encounter any problems, please let us know!\n\nRegards, Daniel\nHANDL`,
+            html: `
+                <p>Welcome to HANDL!</p>
+                <p>Click the link to confirm your email:</p>
+                <a href="https://handl.dev/auth/confirm-email?token=${token}">Confirm your email</a>
+                <p>If you encounter any problems, please let us know!</p>
+                <p>Kind regards,<br>Daniel<br>HANDL</p>
+            `,
         };
     
         const info = await transporter.sendMail(mailOptions);
