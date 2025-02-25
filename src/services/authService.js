@@ -72,7 +72,7 @@ const registerUser = async (name, email, password) => {
     } catch (error) {
         // Roll back transaction if an error occurs
         console.error('Error registering user in db, rolling back:', error);
-        await client.query('ROLLBBACK');
+        await client.query('ROLLBACK');
         throw new Error(`Error during registration: ${error.message}`);
     } finally {
         // Release the client back to the pool
