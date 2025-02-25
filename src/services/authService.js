@@ -3,7 +3,7 @@ const pool = require('../config/db');
 const crypto = require('crypto');
 const emailService = require('../services/emailService');
 
-// Authorization service helper functions
+// Authorization service helper functions used in registerUser
 // Check if the user already exists
 const checkIfUserExists = async (client, email) => {
     try {
@@ -22,7 +22,7 @@ const hashPassword = async (password) => {
         throw new Error('Error hashing password');
     }
 };
-// Email token generation
+// Generate email token and store on db
 const storeEmailToken = async (client, newUser) => {
     const token = crypto.randomBytes(32).toString('hex');
     console.log('Generated token:', token);
@@ -80,7 +80,7 @@ const registerUser = async (name, email, password) => {
     }
 };
 
-// Login to be used in passport.js configuration
+// Login to be used in passport.js configuration, which is then used in controller
 // Validate password during login
 const validatePassword = async (password, hashedPassword) => {
     const isMatch = await bcrypt.compare(password, hashedPassword);
@@ -91,7 +91,7 @@ const getUserByEmail = async (email) => {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     return result.rows[0];
 };
-// Deserialize user
+// Deserialize the user
 const getUserById = async (id) => {
     const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
     return result.rows[0];
