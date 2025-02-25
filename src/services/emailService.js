@@ -34,9 +34,9 @@ const sendConfirmationEmail = async (userEmail, token) => {
             replyTo: process.env.EMAIL_CONTACT,
             subject: 'Confirm your Email',
             html: `
-                <p>Welcome to HANDL!</p>
+                <h1>Welcome to HANDL!</h1>
                 <p>Click the link to confirm your email:</p>
-                <a href="https://handl.dev/auth/confirm-email?token=${token}">Confirm your email</a>
+                <a href="https://handl.dev/confirm-email?token=${token}">Confirm your email</a>
                 <p>If you encounter any problems, please let us know!</p>
                 <p>Kind regards,<br>Daniel<br>HANDL</p>
             `,
