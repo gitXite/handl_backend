@@ -10,6 +10,7 @@ const pool = require('./config/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const contactRoutes = require('./routes/contact');
+const listRoutes = require('./routes/list');
 require('./config/passport');
 
 const app = express();
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/list', listRoutes);
 
 
 // Start server logic
