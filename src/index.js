@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
+const cookieParser = require('cookie-parser');
 
 const cors = require('cors');
 const passport = require('passport');
@@ -26,6 +27,7 @@ app.use(cors({
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Session setup
 app.use(session({
@@ -45,20 +47,23 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Global logging for debug
-app.use((req, res, next) => {
-    console.log('Middleware - Incoming request:', req.method, req.url);
-    console.log('Middleware - Session:', req.session);
-    console.log('Middleware - Cookies recieved:', req.cookies);
-    console.log('Middleware - User: ', req.user);
-    next();
-});
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/list', listRoutes);
+
+
+// Global logging for debug
+app.use((req, res, next) => {
+    console.log('Middleware - Incoming request:', req.method, req.url);
+    console.log('Middleware - Session:', req.session);
+    console.log('Middleware - Cookies recieved:', req.cookies);
+    console.log('Middleware - Headers', res._headers)
+    console.log('Middleware - User: ', req.user);
+    next();
+});
 
 
 // Start server logic
