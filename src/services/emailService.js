@@ -5,6 +5,7 @@ const ApiError = require('../utils/ApiError');
 //
 // Confirmation email
 const sendConfirmationEmail = async (userEmail, token) => {
+    const baseURL = process.env.BASE_URL;
     try {
         let transporter;
         if (process.env.NODE_ENV === 'production') {
@@ -37,7 +38,7 @@ const sendConfirmationEmail = async (userEmail, token) => {
             html: `
                 <h1>Welcome to HANDL!</h1>
                 <p>Click the link to confirm your email:</p>
-                <a href="https://handl.dev/confirm-email?token=${token}">Confirm your email</a>
+                <a href="${process.env.NODE_ENV === 'development' ? `${baseURL}/confirm-email?token=` : 'https://handl.dev/confirm-email?token='}${token}">Confirm your email</a>
                 <p>If you encounter any problems, please let us know!</p>
                 <p>Kind regards,<br>Daniel<br>HANDL</p>
             `,
