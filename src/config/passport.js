@@ -14,6 +14,10 @@ passport.use(
                 email: user.email,
                 email_verified: user.email_verified,
             };
+            if (!user.email_verified) {
+                console.log('Login failed: verify email');
+                return done(null, false, { message: 'Check your email for verification' });
+            }
 
             if (!user) {
                 console.log('Login failed: incorrect email');
@@ -44,6 +48,10 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await authService.getUserById(id);
+
+        if (!user) {
+            return done(null, false);
+        }
         
         console.log('Deserializing User:', user);
         done(null, user);
