@@ -1,6 +1,7 @@
 const authService = require('../services/authService');
 const emailService = require('../services/emailService');
 const passport = require('passport');
+const ApiError = require('../utils/ApiError');
 
 // Controllers for authorization
 //
@@ -17,7 +18,12 @@ const registerUser = async (req, res) => {
         const newUser = await authService.registerUser(name, email, password);
         res.status(201).json({ message: 'User registered successfully! Check your email for confirmation'});
     } catch (error) {
-        console.error('Error during registration:', error);
+        console.error('Error in register controller:', error);
+        
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({ message: error.message });
+        }
+
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -58,7 +64,9 @@ const confirmEmail = async (req, res) => {
         if (!token) return res.status(400).json({ message: 'Invalid token' });
 
         const userId = await authService.verifyUserByToken(token);
-        if (!userId) return res.status(400).json({ message: 'Invalid or expired token' });
+        if (!userId) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
 
         res.status(200).json({ message: 'Email confirmed! You can now log in' });
     } catch (error) {

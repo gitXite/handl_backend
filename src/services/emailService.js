@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const ApiError = require('../utils/ApiError');
 
 // Email service functions
 //
@@ -48,7 +49,7 @@ const sendConfirmationEmail = async (userEmail, token) => {
         }
     } catch (error) {
         console.error('Error sending confirmation email:', error);
-        throw new Error('Failed to send confirmation email');
+        throw new ApiError(500, 'Failed to send confirmation email');
     }
 };
 
@@ -76,7 +77,7 @@ const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
     await transporter.sendMail(mailOptions);
     } catch (error) {
         console.error('Error sending contact email:', error);
-        throw new Error('Failed to send contact email');
+        throw new ApiError(500, 'Failed to send contact email');
     }
 };
 

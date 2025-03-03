@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const pool = require('../config/db');
 const crypto = require('crypto');
 const emailService = require('../services/emailService');
+const ApiError = require('../utils/ApiError');
 
 // Authorization service helper functions used in registerUser
 // Check if the user already exists
@@ -10,7 +11,7 @@ const checkIfUserExists = async (client, email) => {
         const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
         return result.rows.length > 0;
     } catch (error) {
-        throw new Error('Database error during existence check');
+        throw new ApiError(500, 'Database error during existence check');
     }
 };
 // Hash the user password
@@ -19,7 +20,7 @@ const hashPassword = async (password) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         return hashedPassword;
     } catch (error) {
-        throw new Error('Error hashing password');
+        throw new ApiError(500, 'Error hashing password');
     }
 };
 // Generate email token and store on db
@@ -46,7 +47,7 @@ const registerUser = async (name, email, password) => {
         // Check if the user already exists
         const userExists = await checkIfUserExists(client, email);
         if (userExists) {
-            throw new Error('Account already exists');
+            throw new ApiError(400, 'Account already exists');
         }
 
         // Hash the password
@@ -71,9 +72,14 @@ const registerUser = async (name, email, password) => {
         return newUser;
     } catch (error) {
         // Roll back transaction if an error occurs
-        console.error('Error registering user in db, rolling back:', error);
         await client.query('ROLLBACK');
-        throw new Error(`Error during registration: ${error.message}`);
+        console.error('Error registering user in db, rolling back:', error);
+
+        if (error instanceof ApiError) {
+            throw error;
+        }
+
+        throw new ApiError(500, 'Database error');
     } finally {
         // Release the client back to the pool
         client.release();
@@ -102,9 +108,13 @@ const getUserById = async (id) => {
 const verifyUserByToken = async (token) => {
     const result = await pool.query('SELECT id FROM users WHERE email_token = $1 AND email_verified = false', [token]);
 
-    if (result.rowCount === 0) return null;
+    if (result.rowCount === 0) {
+        console.log('No user found or already verified');
+        return null;
+    }
 
     await pool.query('UPDATE users SET email_verified = true, email_token = NULL WHERE id = $1', [result.rows[0].id]);
+
     return result.rows[0].id;
 };
 
