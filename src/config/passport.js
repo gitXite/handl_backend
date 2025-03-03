@@ -8,6 +8,12 @@ passport.use(
         try {
             console.log('Login attempt for:', email);
             const user = await authService.getUserByEmail(email);
+            const userData = {
+                id: user.id,
+                name: user.name, 
+                email: user.email,
+                email_verified: user.email_verified,
+            };
 
             if (!user) {
                 console.log('Login failed: incorrect email');
@@ -21,7 +27,7 @@ passport.use(
             }
 
             console.log('Login successful for:', user.name);
-            return done(null, user);
+            return done(null, userData);
         } catch (error) {
             return done(error);
         }
@@ -38,10 +44,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await authService.getUserById(id);
-
-        // if (!user) {
-        //     return done(null, false);
-        // }
         
         console.log('Deserializing User:', user);
         done(null, user);
