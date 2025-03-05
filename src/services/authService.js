@@ -151,4 +151,5 @@ module.exports = {
     getUserById,
     storeEmailToken,
     verifyUserByToken,
+    validatePasswordStrength,
 };
