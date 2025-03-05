@@ -68,10 +68,9 @@ const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `"HANDL" ${process.env.EMAIL_USER}`,
         to: process.env.EMAIL_CONTACT,
-        replyTo: userEmail,
-        subject: `${userName} - ${userSubject}`,
+        subject: `${userName} - ${userEmail} - ${userSubject}`,
         text: userText,
     };
 

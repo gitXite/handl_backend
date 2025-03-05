@@ -60,7 +60,7 @@ app.use((req, res, next) => {
     console.log('Middleware - Incoming request:', req.method, req.url);
     console.log('Middleware - Session:', req.session);
     console.log('Middleware - Cookies recieved:', req.cookies);
-    console.log('Middleware - Headers', res._headers)
+    console.log('Middleware - Headers', res.headers)
     console.log('Middleware - User: ', req.user);
     next();
 });
