@@ -5,6 +5,25 @@ const emailService = require('../services/emailService');
 const ApiError = require('../utils/ApiError');
 
 // Authorization service helper functions used in registerUser
+// Validate password
+const validatePassword(password) {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password;
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (
+        password.length < minLength ||
+        !hasUpperCase || 
+        !hasLowerCase ||
+        !hasNumber ||
+        !hasSpecialChar
+    ) {
+        return false;
+    }
+    return true;
+};
 // Check if the user already exists
 const checkIfUserExists = async (client, email) => {
     try {
@@ -48,6 +67,10 @@ const registerUser = async (name, email, password) => {
         const userExists = await checkIfUserExists(client, email);
         if (userExists) {
             throw new ApiError(400, 'Account already exists');
+        }
+        // Check password validation
+        if (!validatePassword(password)) {
+            throw new Error('Password must contain minimum 8 chars, lowercase, uppercase, numbers and special chars');
         }
 
         // Hash the password
