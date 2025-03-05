@@ -6,7 +6,7 @@ const ApiError = require('../utils/ApiError');
 
 // Authorization service helper functions used in registerUser
 // Validate password
-const validatePassword(password) {
+const validatePasswordStrength(password) {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password;
@@ -69,7 +69,7 @@ const registerUser = async (name, email, password) => {
             throw new ApiError(400, 'Account already exists');
         }
         // Check password validation
-        if (!validatePassword(password)) {
+        if (!validatePasswordStrength(password)) {
             throw new ApiError(400, 'Password must contain minimum 8 chars, lowercase, uppercase, numbers and special chars');
         }
 
