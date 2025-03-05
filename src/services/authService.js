@@ -6,7 +6,7 @@ const ApiError = require('../utils/ApiError');
 
 // Authorization service helper functions used in registerUser
 // Validate password
-const validatePasswordStrength(password) {
+const validatePasswordStrength = (password) => {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password;
