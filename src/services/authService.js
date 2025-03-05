@@ -70,7 +70,7 @@ const registerUser = async (name, email, password) => {
         }
         // Check password validation
         if (!validatePassword(password)) {
-            throw new Error('Password must contain minimum 8 chars, lowercase, uppercase, numbers and special chars');
+            throw new ApiError(400, 'Password must contain minimum 8 chars, lowercase, uppercase, numbers and special chars');
         }
 
         // Hash the password
