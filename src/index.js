@@ -11,8 +11,9 @@ const pool = require('./config/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const contactRoutes = require('./routes/contact');
-const listRoutes = require('./routes/list');
+const listRoutes = require('./routes/lists');
 const sseRoutes = require('./routes/sse');
+const passwordRoutes = require('./routes/password');
 require('./config/passport');
 
 const app = express();
@@ -55,6 +56,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/lists', listRoutes);
 app.use('/api/events', sseRoutes);
+app.use('/api/password', passwordRoutes);
 
 
 // Global logging for debug
