@@ -1,32 +1,46 @@
+const { getUserBySharedLists } = require('../services/sseService');
 const sseClients = {};
 
-const sseHandler = (req, res) => {
+const sseHandler = async (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    const { listId } = req.query;
-    if (!listId) {
-        res.status(400).end();
+    const userId = req.user?.id;
+    if (!userId) {
+        res.status(401).end();
         return;
     }
 
-    const sendEvent = (data) => {
-        res.write(`data: ${JSON.stringify(data)}\n\n`);
-    };
+    try {
+        const userLists = await getUserBySharedLists(userId);
 
-    if (!sseClients[listId]) {
-        sseClients[listId] = [];
+        const sendEvent = (data) => {
+            res.write(`data: ${JSON.stringify(data)}\n\n`);
+        };
+
+        userLists.forEach(listId => {
+            if (!sseClients[listId]) {
+                sseClients[listId] = [];
+            }
+            sseClients[listId].push(sendEvent);
+        });
+
+        req.on("close", () => {
+            userLists.forEach(listId => {
+                if (sseClients[listId]) {
+                    sseClients[listId] = sseClients[listId].filter(client => client !== sendEvent);
+                    // Clean up if no clients are left for the list
+                    if (sseClients[listId].length === 0) {
+                        delete sseClients[listId];
+                    }
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error retrieving user lists:', error);
+        res.status(500).end();
     }
-
-    sseClients[listId].push(sendEvent);
-
-    req.on('close', () => {
-        sseClients[listID] = sseClients[listId].filter(client => client !== sendEvent);
-        if (sseClients[listId].length === 0) {
-            delete sseClients[listId];
-        }
-    });
 };
 
 const broadcastEvent = (listId, event, data) => {
