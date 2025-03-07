@@ -6,10 +6,10 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 
 // Get lists API route
-// router.get('/get-lists', authMiddleware.isAuthenticated, listController.fetchLists);
+// router.get('/', authMiddleware.isAuthenticated, listController.fetchLists);
 
 // Get items in list API route
-// router.get('/items', authMiddleware.isAuthenticated, listController.fetchItems);
+// router.get('/:id/items', authMiddleware.isAuthenticated, listController.fetchItems);
 
 
 module.exports = router;
