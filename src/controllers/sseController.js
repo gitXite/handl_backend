@@ -1,24 +1,38 @@
-const sseClients = [];
+const sseClients = {};
 
 const sseHandler = (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
+    const { listId } = req.query;
+    if (!listId) {
+        res.status(400).end();
+        return;
+    }
+
     const sendEvent = (data) => {
         res.write(`data: ${JSON.stringify(data)}\n\n`);
     };
 
-    sseClients.push(sendEvent);
+    if (!sseClients[listId]) {
+        sseClients[listId] = [];
+    }
+
+    sseClients[listId].push(sendEvent);
 
     req.on('close', () => {
-        const index = sseClients.indexOf(sendEvent);
-        if (index !== -1) sseClients.splice(index, 1); 
+        sseClients[listID] = sseClients[listId].filter(client => client !== sendEvent);
+        if (sseClients[listId].length === 0) {
+            delete sseClients[listId];
+        }
     });
 };
 
-const broadcastEvent = (event, data) => {
-    sseClients.forEach(client => client({ event, data }));
+const broadcastEvent = (listId, event, data) => {
+    if (sseClients[listId]) {
+        sseClients[listId].forEach(client => client({ event, data }));
+    }
 };
 
 
