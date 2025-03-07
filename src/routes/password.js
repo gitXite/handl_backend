@@ -3,12 +3,12 @@ const router = express.Router();
 
 
 // Routes for forgot password
-router.get('/forgot');
-router.post('/forgot');
+router.get('/forgot-password');
+router.post('/forgot-password');
 
 // Routes for reset password
-router.get('/reset');
-router.post('/reset');
+router.get('/reset-password');
+router.post('/reset-password');
 
 
 module.exports = router;
