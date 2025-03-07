@@ -12,6 +12,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const contactRoutes = require('./routes/contact');
 const listRoutes = require('./routes/list');
+const sseRoutes = require('./routes/sse');
 require('./config/passport');
 
 const app = express();
@@ -53,6 +54,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/list', listRoutes);
+app.use('/api/events', sseRoutes);
 
 
 // Global logging for debug
