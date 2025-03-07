@@ -53,7 +53,7 @@ app.use(passport.session());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/list', listRoutes);
+app.use('/api/lists', listRoutes);
 app.use('/api/events', sseRoutes);
 
 
