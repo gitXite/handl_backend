@@ -14,7 +14,7 @@ router.get('/confirm-email', authController.confirmEmail);
 router.post('/login', authController.loginUser);
 
 // Session api route
-router.get('/get-session', sessionController.checkSession);
+router.get('/session', sessionController.checkSession);
 
 // Logout api route
 router.post('/logout', sessionController.logoutUser);
