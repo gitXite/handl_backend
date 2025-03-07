@@ -14,3 +14,6 @@ const getUserBySharedLists = async (userId) => {
         throw error; // Propagate the error to be handled in the controller
     }
 };
+
+
+module.exports = { getUserBySharedLists }
