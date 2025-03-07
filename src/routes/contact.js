@@ -4,7 +4,7 @@ const contactController = require('../controllers/contactController');
 
 
 // Contact api route
-router.post('/submit-form', contactController.contactEmail);
+router.post('/form', contactController.contactEmail);
 
 
 module.exports = router;
