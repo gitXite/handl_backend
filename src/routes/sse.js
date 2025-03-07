@@ -4,7 +4,7 @@ const router = express.Router();
 const { sseHandler } = require('../controllers/sseController');
 
 
-router.get('/', sseHandler); // clients must send ?listId=xxx
+router.get('/', sseHandler);
 
 
 module.exports = router;
