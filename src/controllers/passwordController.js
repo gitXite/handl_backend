@@ -3,7 +3,7 @@ import passwordService from '../services/passwordService';
 
 
 const forgotPassword = async (req, res) => {
-    const email = req.body;
+    const { email } = req.body;
     try {
         const userExists = await authService.checkIfUserExists(pool, email);
         if (!userExists) {
@@ -12,10 +12,18 @@ const forgotPassword = async (req, res) => {
         const user = await authService.getUserByEmail(email);
 
         const passwordToken = await passwordService.storePasswordToken(user);
-        
+        if (passwordToken) {
+            await emailService.sendPasswordToken(passwordToken, email);
+        }
+        res.status(200).json({ message: 'Success, check your mail to reset password!' });
     } catch (error) {
+        console.error('Error in passwordController:', error);
         res.status(500).json({ message: 'Failed to submit email, please try again.' });
     }
+};
+
+const resetPassword = async () => {
+    // Logic here
 };
 
 
