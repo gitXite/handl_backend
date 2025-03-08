@@ -81,6 +81,11 @@ const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
     }
 };
 
+// Send email to reset password
+const sendPasswordToken = async (passwordToken, email) => {
+    // Logic here
+};
+
 
 module.exports = {
     sendConfirmationEmail,
