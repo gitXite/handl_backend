@@ -83,7 +83,12 @@ const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
 
 // Send email to reset password
 const sendPasswordToken = async (passwordToken, email) => {
-    // Logic here
+    const baseURL = process.env.BASE_URL;
+    try {
+        // Logic here
+    } catch (error) {
+        
+    }
 };
 
 
