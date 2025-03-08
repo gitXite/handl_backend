@@ -5,7 +5,7 @@ const updateShoppingList = (listId, updates) => {
     // update database here
     
     const updatedList = { id: listId, ...updates };
-    broadcastEvent(listId, 'list-updated', updatedList);
+    broadcastEvent(listId, 'LIST_UPDATED', updatedList);
     
     return updatedList;
 };
