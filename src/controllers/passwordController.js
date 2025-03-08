@@ -15,7 +15,7 @@ const forgotPassword = async (req, res) => {
         if (passwordToken) {
             await emailService.sendPasswordToken(passwordToken, email);
         }
-        res.status(200).json({ message: 'Success, check your mail to reset password!' });
+        res.status(200).json({ message: 'Success, check your email to reset password!' });
     } catch (error) {
         console.error('Error in passwordController:', error);
         res.status(500).json({ message: 'Failed to submit email, please try again.' });
