@@ -14,3 +14,8 @@ const storePasswordToken = async (user) => {
         throw error;
     }
 };
+
+
+module.exports = {
+    storePasswordToken,
+};
