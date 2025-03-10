@@ -1,6 +1,6 @@
-import pool = require('../config/db');
-import crypto = require('crypto');
-import bcrypt = require('bcrypt');
+const pool = require('../config/db');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 
 const storePasswordToken = async (user) => {

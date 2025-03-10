@@ -1,5 +1,5 @@
-import authService from '../services/authService';
-import passwordService from '../services/passwordService';
+const authService = require('../services/authService');
+const passwordService = require('../services/passwordService');
 
 
 const forgotPassword = async (req, res) => {

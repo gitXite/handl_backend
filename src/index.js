@@ -59,17 +59,6 @@ app.use('/api/events', sseRoutes);
 app.use('/api/password', passwordRoutes);
 
 
-// Global logging for debug
-app.use((req, res, next) => {
-    console.log('Middleware - Incoming request:', req.method, req.url);
-    console.log('Middleware - Session:', req.session);
-    console.log('Middleware - Cookies recieved:', req.cookies);
-    console.log('Middleware - Headers', res.headers)
-    console.log('Middleware - User: ', req.user);
-    next();
-});
-
-
 // Start server logic
 async function startServer() {
     try {

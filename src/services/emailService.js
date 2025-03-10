@@ -95,4 +95,5 @@ const sendPasswordToken = async (passwordToken, email) => {
 module.exports = {
     sendConfirmationEmail,
     sendContactEmail,
+    sendPasswordToken,
 }
