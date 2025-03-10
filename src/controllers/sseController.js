@@ -17,8 +17,8 @@ const sseHandler = async (req, res) => {
 
         res.write(`data: ${JSON.stringify({ event: 'connected', message: 'SSE connected' })}\n\n`);
 
-        const sendEvent = (data) => {
-            res.write(`data: ${JSON.stringify(data)}\n\n`);
+        const sendEvent = (event, data) => {
+            res.write(`data: ${JSON.stringify({ event, data })}\n\n`);
         };
 
         userLists.forEach(listId => {
@@ -29,15 +29,19 @@ const sseHandler = async (req, res) => {
         });
 
         req.on("close", () => {
-            userLists.forEach(listId => {
-                if (sseClients[listId]) {
-                    sseClients[listId] = sseClients[listId].filter(client => client !== sendEvent);
-                    // Clean up if no clients are left for the list
-                    if (sseClients[listId].length === 0) {
-                        delete sseClients[listId];
+            try {
+                userLists.forEach(listId => {
+                    if (sseClients[listId]) {
+                        sseClients[listId] = sseClients[listId].filter(client => client !== sendEvent);
+                        // Clean up if no clients are left for the list
+                        if (sseClients[listId].length === 0) {
+                            delete sseClients[listId];
+                        }
                     }
-                }
-            });
+                });
+            } catch (error) {
+                console.error('Error cleaning up SSE clients:', error);
+            }
         });
     } catch (error) {
         console.error('Error retrieving user lists:', error);
@@ -47,7 +51,7 @@ const sseHandler = async (req, res) => {
 
 const broadcastEvent = (listId, event, data) => {
     if (sseClients[listId]) {
-        sseClients[listId].forEach((client) => client({ event, data }));
+        sseClients[listId].forEach(client => client(event, data));
     }
 };
 
