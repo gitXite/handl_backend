@@ -1,4 +1,4 @@
-const { getUserBySharedLists } = require('../services/sseService');
+const { getSharedListsForUser } = require('../services/sseService');
 const sseClients = {};
 
 const sseHandler = async (req, res) => {
@@ -13,7 +13,7 @@ const sseHandler = async (req, res) => {
     }
 
     try {
-        const userLists = await getUserBySharedLists(userId);
+        const userLists = await getSharedListsForUser(userId);
 
         res.write(`data: ${JSON.stringify({ event: 'connected', message: 'SSE connected' })}\n\n`);
 
