@@ -15,6 +15,8 @@ const sseHandler = async (req, res) => {
     try {
         const userLists = await getUserBySharedLists(userId);
 
+        res.write(`data: ${JSON.stringify({ event: 'connected', message: 'SSE connected' })}\n\n`);
+
         const sendEvent = (data) => {
             res.write(`data: ${JSON.stringify(data)}\n\n`);
         };
@@ -45,7 +47,7 @@ const sseHandler = async (req, res) => {
 
 const broadcastEvent = (listId, event, data) => {
     if (sseClients[listId]) {
-        sseClients[listId].forEach(client => client({ event, data }));
+        sseClients[listId].forEach((client) => client({ event, data }));
     }
 };
 
