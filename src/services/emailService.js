@@ -70,7 +70,7 @@ const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
     const mailOptions = {
         from: `"HANDL" ${process.env.EMAIL_USER}`,
         to: process.env.EMAIL_CONTACT,
-        subject: `${userName} - ${userEmail} - ${userSubject}`,
+        subject: `Name:${userName} - Email:${userEmail} - Subject:${userSubject}`,
         text: userText,
     };
 
@@ -82,12 +82,54 @@ const sendContactEmail = async (userName, userEmail, userSubject, userText) => {
 };
 
 // Send email to reset password
-const sendPasswordToken = async (passwordToken, email) => {
+const sendPasswordToken = async (passwordToken, userEmail) => {
     const baseURL = process.env.BASE_URL;
     try {
-        // Logic here
-    } catch (error) {
+        let transporter;
+        if (process.env.NODE_ENV === 'production') {
+            transporter = nodemailer.createTransport({
+                host: 'mail.spacemail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+            },
+        });
+        } else {
+            const testAccount = await nodemailer.createTestAccount();
+            transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                auth: {
+                    user: testAccount.user,
+                    pass: testAccount.pass,
+                },
+            });
+        }
         
+        const mailOptions = {
+            from: process.env.EMAIL_USER || 'test@ethereal.email',
+            to: userEmail,
+            replyTo: process.env.EMAIL_CONTACT,
+            subject: 'Reset password',
+            html: `
+                <h1>Reset password</h1>
+                <p>Click the link to reset your password:</p>
+                <a href="${process.env.NODE_ENV === 'development' ? `${baseURL}/reset-password?token=` : 'https://handl.dev/reset-password?token='}${passwordToken}">Reset your password</a>
+                <p>If you didnt request a password change, DO NOT click the link!</p>
+                <p>Please let us know if you encounter any issues.</p>
+                <p>Kind regards,<br>Daniel<br>HANDL</p>
+            `,
+        };
+    
+        const info = await transporter.sendMail(mailOptions);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Test email preview URL:', nodemailer.getTestMessageUrl(info));
+        }
+    } catch (error) {
+        console.error('Error sending confirmation email:', error);
+        throw new ApiError(500, 'Failed to send confirmation email');
     }
 };
 
