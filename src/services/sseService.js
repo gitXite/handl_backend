@@ -4,7 +4,7 @@ const pool = require('../config/db');
 const getUserBySharedLists = async (userId) => {
     try {
         // Query the database to find all lists this user has access to
-        const { rows } = await db.query(
+        const { rows } = await pool.query(
             "SELECT list_id FROM shared_lists WHERE user_id = $1", 
             [userId]
         );
