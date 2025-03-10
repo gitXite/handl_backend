@@ -1,5 +1,6 @@
 const authService = require('../services/authService');
 const passwordService = require('../services/passwordService');
+const ApiError = require('../utils/ApiError');
 
 
 const forgotPassword = async (req, res) => {
@@ -12,9 +13,11 @@ const forgotPassword = async (req, res) => {
         const user = await authService.getUserByEmail(email);
 
         const passwordToken = await passwordService.storePasswordToken(user);
-        if (passwordToken) {
-            await emailService.sendPasswordToken(passwordToken, email);
+        if (!passwordToken) {
+            return res.status(404).json({ message: 'No token found' });
         }
+
+        await emailService.sendPasswordToken(passwordToken, email);
         res.status(200).json({ message: 'Success, check your email to reset password!' });
     } catch (error) {
         console.error('Error in passwordController:', error);
@@ -22,11 +25,26 @@ const forgotPassword = async (req, res) => {
     }
 };
 
-const resetPassword = async () => {
-    // Logic here
+const resetPassword = async (req, res) => {
+    const { token } = req.query;
+    const { newPassword } = req.body;
+
+    try {
+        const userId = await passwordService.validatePasswordToken(token);
+
+        await passwordService.updatePassword(newPassword, userId);
+        res.status(200).json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Error in password controller:', error);
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({ message: error.message });
+        }
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };
 
 
 module.exports = {
     forgotPassword,
+    resetPassword,
 };
