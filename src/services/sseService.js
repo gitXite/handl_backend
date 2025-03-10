@@ -1,19 +1,22 @@
 const pool = require('../config/db');
 
 
-const getUserBySharedLists = async (userId) => {
+const getSharedListsForUser = async (userId) => {
     try {
-        // Query the database to find all lists this user has access to
         const { rows } = await pool.query(
-            "SELECT list_id FROM shared_lists WHERE user_id = $1", 
+            `SELECT l.id, l.name 
+             FROM lists l 
+             JOIN shared_lists s ON l.id = s.list_id 
+             WHERE s.user_id = $1`,
             [userId]
         );
-        return rows.map(row => row.list_id);
+
+        return rows; // Returns [{ id: 1, name: "Groceries" }, ...]
     } catch (error) {
-        console.error("Error retrieving user lists:", error);
-        throw error; // Propagate the error to be handled in the controller
+        console.error("Error retrieving shared lists for user:", error);
+        return [];
     }
 };
 
 
-module.exports = { getUserBySharedLists }
+module.exports = { getSharedListsForUser }
