@@ -114,7 +114,7 @@ const sendPasswordToken = async (passwordToken, userEmail) => {
             replyTo: process.env.EMAIL_CONTACT,
             subject: 'Reset password',
             html: `
-                <h1>Reset password</h1>
+                <h1>HANDL</h1>
                 <p>Click the link to reset your password:</p>
                 <a href="${process.env.NODE_ENV === 'development' ? `${baseURL}/reset-password?token=` : 'https://handl.dev/reset-password?token='}${passwordToken}">Reset your password</a>
                 <p>If you didnt request a password change, DO NOT click the link!</p>
