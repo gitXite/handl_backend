@@ -1,5 +1,7 @@
+const pool = require('../config/db');
 const authService = require('../services/authService');
 const passwordService = require('../services/passwordService');
+const emailService = require('../services/emailService');
 const ApiError = require('../utils/ApiError');
 
 
