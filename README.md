@@ -9,3 +9,4 @@ A collaborative full stack shopping list web application
 - Express session
 - Authentication using passport.js
 - PostgreSQL database
+- RESTful API
