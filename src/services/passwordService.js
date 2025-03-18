@@ -55,8 +55,13 @@ const updatePassword = async (newPassword, userId) => {
     if (!authService.validatePasswordStrength(newPassword)) {
         throw new ApiError(400, 'Password does not meet the required criteria.');
     }
-    const hashedPassword = await authService.hashPassword(newPassword);
+    const oldPassword = await pool.query('SELECT password FROM users WHERE id = $1', [userId]);
+    const isMatch = await bcrypt.compare(newPassword, oldPassword);
+    if (isMatch) {
+        throw new ApiError(400, 'New password cannot be the same as your old password');
+    }
     
+    const hashedPassword = await authService.hashPassword(newPassword);
     await pool.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, userId]);
 };
 
