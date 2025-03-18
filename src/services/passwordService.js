@@ -60,9 +60,14 @@ const updatePassword = async (newPassword, userId) => {
     if (isMatch) {
         throw new ApiError(400, 'New password cannot be the same as your old password');
     }
-    
-    const hashedPassword = await authService.hashPassword(newPassword);
-    await pool.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, userId]);
+
+    try {
+        const hashedPassword = await authService.hashPassword(newPassword);
+        await pool.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, userId]);
+    } catch (error) {
+        console.error('Error updating password in database:', error);
+        throw new ApiError(500, 'Internal server error');
+    }
 };
 
 
