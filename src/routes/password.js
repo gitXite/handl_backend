@@ -7,6 +7,7 @@ const passwordController = require('../controllers/passwordController');
 router.post('/forgot-password', passwordController.forgotPassword);
 
 // Routes for reset password
+router.get('/reset-password', passwordController.validateResetToken);
 router.post('/reset-password', passwordController.resetPassword);
 
 
