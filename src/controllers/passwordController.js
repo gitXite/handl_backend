@@ -27,17 +27,30 @@ const forgotPassword = async (req, res) => {
     }
 };
 
-const resetPassword = async (req, res) => {
+const validateResetToken = async (req, res) => {
     const { token } = req.query;
-    const { newPassword } = req.body;
+
+    try {
+        await passwordService.validatePasswordToken(token);
+        res.status(200).json({ message: 'Valid token' });
+    } catch (error) {
+        console.error('Error validating password reset token:', error);
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({ message: error.message });
+        }
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    const { newPassword, token } = req.body;
 
     try {
         const userId = await passwordService.validatePasswordToken(token);
-
         await passwordService.updatePassword(newPassword, userId);
         res.status(200).json({ message: 'Password reset successfully' });
     } catch (error) {
-        console.error('Error in password controller:', error);
+        console.error('Error resetting password:', error);
         if (error instanceof ApiError) {
             return res.status(error.status).json({ message: error.message });
         }
