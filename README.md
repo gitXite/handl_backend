@@ -1,6 +1,6 @@
 # HANDL
 
-![Logo](https://github.com/[gitXite]/[handl_frontend]/blob/[main]/src/assets/icons/new_logo.png)
+![Logo](https://raw.githubusercontent.com/gitXite/handl_frontend/blob/main/src/assets/icons/new_logo.png)
 
 Backend repository for Handl. 
 A collaborative full stack shopping list web application
