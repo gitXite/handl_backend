@@ -3,10 +3,14 @@
 Backend repository for Handl. 
 A collaborative full stack shopping list web application
 
-## Stack
+## Backend Stack
 - Node.js
 - Express.js 
-- Express session
-- Authentication using passport.js
+- Express sessions
 - PostgreSQL database
-- RESTful API
+- REST API
+
+## Libraries
+- passport.js
+- bcrypt
+- crypto
