@@ -32,7 +32,7 @@ const validateResetToken = async (req, res) => {
 
     try {
         await passwordService.validatePasswordToken(token);
-        res.status(200).json({ message: 'Valid token' });
+        res.status(200).json({ message: 'Proceed to reset password' });
     } catch (error) {
         console.error('Error validating password reset token:', error);
         if (error instanceof ApiError) {
