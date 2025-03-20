@@ -31,10 +31,10 @@ const validatePasswordToken = async (token) => {
         for (const row of result.rows) {
             const isMatch = await bcrypt.compare(token, row.token)
             if (isMatch) {
-                userId = row.user_id;
                 if (row.expires_at < new Date()) {
                     throw new ApiError(400, 'Token expired');
                 }
+                userId = row.user_id;
                 break;
             }
         }
@@ -50,7 +50,7 @@ const validatePasswordToken = async (token) => {
         if (error instanceof ApiError) {
             throw error;
         }
-        
+
         throw new ApiError(500, 'Internal server error');
     }
 };
