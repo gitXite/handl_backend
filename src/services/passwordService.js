@@ -47,6 +47,10 @@ const validatePasswordToken = async (token) => {
         return userId;
     } catch (error) {
         console.error('Error validating password reset token:', error);
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        
         throw new ApiError(500, 'Internal server error');
     }
 };
