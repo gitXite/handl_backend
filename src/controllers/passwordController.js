@@ -43,11 +43,11 @@ const validateResetToken = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-    const { newPassword, token } = req.body;
+    const { password, token } = req.body;
 
     try {
         const userId = await passwordService.validatePasswordToken(token);
-        await passwordService.updatePassword(newPassword, userId);
+        await passwordService.updatePassword(password, userId);
         res.status(200).json({ message: 'Password reset successfully' });
     } catch (error) {
         console.error('Error resetting password:', error);

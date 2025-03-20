@@ -43,7 +43,6 @@ const validatePasswordToken = async (token) => {
             throw new ApiError(400, 'Invalid token');
         }
 
-        await pool.query('DELETE FROM password_reset_tokens WHERE user_id = $1', [userId]);
         return userId;
     } catch (error) {
         console.error('Error validating password reset token:', error);
@@ -60,7 +59,7 @@ const updatePassword = async (newPassword, userId) => {
         throw new ApiError(400, 'Password does not meet the required criteria.');
     }
     const oldPassword = await pool.query('SELECT password FROM users WHERE id = $1', [userId]);
-    const isMatch = await bcrypt.compare(newPassword, oldPassword);
+    const isMatch = await bcrypt.compare(newPassword, oldPassword.rows[0].password);
     if (isMatch) {
         throw new ApiError(400, 'New password cannot be the same as your old password');
     }
@@ -68,6 +67,7 @@ const updatePassword = async (newPassword, userId) => {
     try {
         const hashedPassword = await authService.hashPassword(newPassword);
         await pool.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, userId]);
+        await pool.query('DELETE FROM password_reset_tokens WHERE user_id = $1', [userId]);
     } catch (error) {
         console.error('Error updating password in database:', error);
         throw new ApiError(500, 'Internal server error');
