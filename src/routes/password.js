@@ -3,10 +3,9 @@ const router = express.Router();
 const passwordController = require('../controllers/passwordController');
 
 
-// Routes for forgot password
+// Endpoint: /api/password/
 router.post('/forgot-password', passwordController.forgotPassword);
 
-// Routes for reset password
 router.get('/reset-password', passwordController.validateResetToken);
 router.post('/reset-password', passwordController.resetPassword);
 
