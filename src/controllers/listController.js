@@ -1,4 +1,5 @@
 const listService = require('../services/listService');
+const ApiError = require('../utils/ApiError');
 
 
 const getLists = async (req, res) => {
@@ -10,6 +11,9 @@ const getLists = async (req, res) => {
         res.status(200).json(lists);
     } catch (error) {
         console.error('Error fetching lists:', error);
+        if (error instanceOf ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
         res.status(500).json({ error: 'Failed to retrieve lists' });
     }
 };
@@ -28,6 +32,9 @@ const createList = async (req, res) => {
         res.status(201).json(newList);
     } catch (error) {
         console.error('Error creating list:', error);
+        if (error instanceOf ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
         res.status(500).json({ error: 'Failed to create list' });
     }
 };
@@ -46,6 +53,9 @@ const deleteList = async (req, res) => {
         res.status(200).json({ message: 'List deleted successfully' });
     } catch (error) {
         console.error('Error deleting list:', error);
+        if (error instanceOf ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
         res.status(500).json({ error: 'Failed to delete list' });
     }
 };
