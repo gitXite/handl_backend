@@ -9,7 +9,8 @@ router.get('/', authMiddleware.isAuthenticated, listController.getLists);
 router.post('/', authMiddleware.isAuthenticated, listController.createList);
 router.delete('/:listId', authMiddleware.isAuthenticated, listController.deleteList);
 
-// router.post('/:listId/share', authMiddleware.isAuthenticated, listController.someFunction);
+router.post('/:listId/share', authMiddleware.isAuthenticated, listController.shareList);
+router.get('/listId/shared-users', authMiddleware.isAuthenticated, listController.getSharedUsers);
 // router.delete('/:listId/unshare', authMiddleware.isAuthenticated, listController.someFunction);
 
 router.get('/:listId/items', authMiddleware.isAuthenticated, listController.getItems);
