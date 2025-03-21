@@ -5,9 +5,9 @@ const listController = require('../controllers/listController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // /api/lists/
-// router.get('/', authMiddleware.isAuthenticated, listController.fetchLists);
-// router.post('/', authMiddleware.isAuthenticated, listController.someFunction);
-// router.delete('/:listId', authMiddleware.isAuthenticated, listController.someFunciton);
+router.get('/', authMiddleware.isAuthenticated, listController.getLists);
+router.post('/', authMiddleware.isAuthenticated, listController.createList);
+router.delete('/:listId', authMiddleware.isAuthenticated, listController.deleteList);
 
 // router.post('/:listId/share', authMiddleware.isAuthenticated, listController.someFunction);
 // router.delete('/:listId/unshare', authMiddleware.isAuthenticated, listController.someFunction);
