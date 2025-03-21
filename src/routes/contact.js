@@ -3,7 +3,7 @@ const router = express.Router();
 const contactController = require('../controllers/contactController');
 
 
-// Contact api route
+// Endpoint: /api/contact/
 router.post('/form', contactController.contactEmail);
 
 
