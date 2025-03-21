@@ -4,12 +4,18 @@ const router = express.Router();
 const listController = require('../controllers/listController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-
-// Get lists API route
+// /api/lists/
 // router.get('/', authMiddleware.isAuthenticated, listController.fetchLists);
+// router.post('/', authMiddleware.isAuthenticated, listController.someFunction);
+// router.delete('/:listId', authMiddleware.isAuthenticated, listController.someFunciton);
 
-// Get items in list API route
-// router.get('/:id/items', authMiddleware.isAuthenticated, listController.fetchItems);
+// router.post('/:listId/share', authMiddleware.isAuthenticated, listController.someFunction);
+// router.delete('/:listId/unshare', authMiddleware.isAuthenticated, listController.someFunction);
+
+// router.get('/:listId/items', authMiddleware.isAuthenticated, listController.fetchItems);
+// router.post('/:listId/items', authMiddleware.isAuthenticated, listController.someFunction);
+// router.patch('/:listId/items/:itemId', authMiddleware.isAuthenticated, listController.someFunction);
+// router.delete('/:listId/items/:listId', authMiddleware.isAuthenticated, listController.someFunction);
 
 
 module.exports = router;
