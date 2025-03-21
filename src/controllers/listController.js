@@ -145,6 +145,48 @@ const deleteItem = async (req, res) => {
 };
 
 
+const shareList = async (req, res) => {
+    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
+
+    const { listId } = req.params;
+    const { email } = req.body;
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+    }
+
+    try {
+        const sharedList = await listService.shareList(listId, req.user.id, email);
+        if (!sharedList) {
+            return res.status(403).json({ message: 'You are not authorized to share this list or user does not exist' });
+        }
+
+        res.status(200).json({ message: 'List shared successfully', sharedList });
+    } catch (error) {
+        console.error('Error sharing list:', error);
+        if (error instanceOf ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to share list' });
+    }
+};
+
+const getSharedUsers = async (req, res) => {
+    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
+
+    const { listId } = req.params;
+    try {
+        const users = await listService.getSharedUsers(listId, req.user.id);
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching shared users:', error);
+        if (error instanceOf ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to retrieve shared users' });
+    }
+};
+
+
 module.exports = {
     getLists, 
     createList,
@@ -153,4 +195,6 @@ module.exports = {
     addItem,
     updateItem,
     deleteItem,
+    shareList,
+    getSharedUsers,
 };
