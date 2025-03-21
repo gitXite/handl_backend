@@ -4,7 +4,7 @@ const router = express.Router();
 const listController = require('../controllers/listController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// /api/lists/
+// Endpoint: /api/lists/
 router.get('/', authMiddleware.isAuthenticated, listController.getLists);
 router.post('/', authMiddleware.isAuthenticated, listController.createList);
 router.delete('/:listId', authMiddleware.isAuthenticated, listController.deleteList);
@@ -12,10 +12,10 @@ router.delete('/:listId', authMiddleware.isAuthenticated, listController.deleteL
 // router.post('/:listId/share', authMiddleware.isAuthenticated, listController.someFunction);
 // router.delete('/:listId/unshare', authMiddleware.isAuthenticated, listController.someFunction);
 
-// router.get('/:listId/items', authMiddleware.isAuthenticated, listController.fetchItems);
-// router.post('/:listId/items', authMiddleware.isAuthenticated, listController.someFunction);
-// router.patch('/:listId/items/:itemId', authMiddleware.isAuthenticated, listController.someFunction);
-// router.delete('/:listId/items/:listId', authMiddleware.isAuthenticated, listController.someFunction);
+router.get('/:listId/items', authMiddleware.isAuthenticated, listController.getItems);
+router.post('/:listId/items', authMiddleware.isAuthenticated, listController.addItem);
+router.patch('/:listId/items/:itemId', authMiddleware.isAuthenticated, listController.updateItem);
+router.delete('/:listId/items/:listId', authMiddleware.isAuthenticated, listController.deleteItem);
 
 
 module.exports = router;
