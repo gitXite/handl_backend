@@ -113,6 +113,61 @@ const deleteItem = async (itemId, userId) => {
 };
 
 
+const shareList = async (listId, userId, email) => {
+    try {
+        // Existence check and owner
+        const listCheck = await pool.query(
+            `SELECT id FROM lists WHERE id = $1 AND owner_id = $2`,
+            [listId, userId]
+        );
+        if (listCheck.rowCount === 0) return null;
+
+        // Find recipient user by email
+        const recipient = await pool.query(
+            'SELECT id FROM users WHERE email = $1',
+            [email]
+        );
+        if (recipient.rowCount === 0) return null;
+
+        const result = await pool.query(
+            `INSERT INTO shared_lists (list_id, user_id) VALUES ($1, $2) RETURNING *`,
+            [listId, recipient.rows[0].id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer': error);
+        throw new ApiError(500, 'Failed to share list');
+    }
+};
+
+const getSharedUsers = async (listId, userId) => {
+    try {
+        // Check ownership or access
+        const listCheck = await db.query(
+            `SELECT id FROM lists 
+            WHERE id = $1 AND (owner_id = $2 OR EXISTS (
+                SELECT 1 FROM shared_lists 
+                WHERE shared_lists.list_id = $1 AND shared_lists.user_id = $2
+            ))`,
+            [listId, userId]
+        );
+        if (listCheck.rowCount === 0) return [];
+
+        const sharedUsers = await pool.query(
+            `SELECT users.email 
+             FROM users 
+             JOIN shared_lists ON users.id = shared_lists.user_id 
+             WHERE shared_lists.list_id = $1`,
+            [listId]
+        );
+        return sharedUsers.rows;
+    } catch (error) {
+        console.error('Database error in service layer': error);
+        throw new ApiError(500, 'Failed to get shared users');
+    }
+};
+
+
 module.exports = {
     getUserLists, 
     createList,
@@ -121,4 +176,6 @@ module.exports = {
     addItemToList,
     updateItem,
     deleteItem,
+    shareList,
+    getSharedUsers,
 };
