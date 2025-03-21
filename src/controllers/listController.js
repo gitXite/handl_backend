@@ -186,6 +186,26 @@ const getSharedUsers = async (req, res) => {
     }
 };
 
+const removeSharedUser = async (req, res) => {
+    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
+
+    const { listId, targetUserId } = req.params;
+    try {
+        const removedUser = await listService.removeSharedUser(listId, req.user.id, targetUserId);
+        if (!removedUser) {
+            return res.status(403).json({ message: 'You are not authorized to remove this user or no such share exists' });
+        }
+
+        res.status(200).json({ message: 'Shared user removed successfully', removedUser });
+    } catch (error) {
+        console.error('Error removing shared user:', error);
+        if (error instanceOf ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to remove shared user' });
+    }
+};
+
 
 module.exports = {
     getLists, 
@@ -197,4 +217,5 @@ module.exports = {
     deleteItem,
     shareList,
     getSharedUsers,
+    removeSharedUser,
 };
