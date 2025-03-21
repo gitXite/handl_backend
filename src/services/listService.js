@@ -35,8 +35,90 @@ const deleteList = async (userId, listId) => {
 };
 
 
+const getListItems = async (listId, userId) => {
+    try {
+        const result = await pool.query(
+            `SELECT items.* 
+            FROM items 
+            JOIN lists ON items.list_id = lists.id
+            LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
+            WHERE items.list_id = $1
+            AND (lists.owner_id = $2 OR shared_lists.user_id = $2`, 
+            [listId, userId]
+        );
+        return result.rows;
+    } catch (error) {
+        console.error('Database error in service layer': error);
+        throw new ApiError(500, 'Failed to retrieve items');
+    }
+};
+
+const addItemToList = async (listId, userId, name, quantity) => {
+    try {
+        const listCheck = await pool.query(
+            `SELECT 1 FROM lists
+            LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
+            WHERE lists.id = $1 AND (lists.owner_id = $2 OR shared_lists.user_id = $2`,
+            [listId, userId]
+        );
+        if (listCheck.rowCount === 0) return null;
+        const result = await pool.query(
+            `INSERT INTO items (list_id, name, quantity) VALUES ($1, $2, $3) RETURNING *`,
+            [listId, name, quantity]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer': error);
+        throw new ApiError(500, 'Failed to add item');
+    }
+};
+
+const updateItem = async (itemId, userId, name, quantity) => {
+    try {
+        const result = await pool.query(
+            `UPDATE items
+            SET name = $1, quantity = $2
+            WHERE id = $3
+            AND list_id IN (
+                SELECT lists.id FROM lists
+                LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
+                WHERE lists.owner_id = $4 OR shared_lists.user_id = $4
+            ) RETURNING *`,
+            [name, quantity, itemId, userId]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer': error);
+        throw new ApiError(500, 'Failed to update item');
+    }
+};
+
+const deleteItem = async (itemId, userId) => {
+    try {
+        const result = await pool.query(
+            `DELETE FROM items
+            WHERE id = $1
+            AND list_id IN (
+                SELECT lists.id FROM lists
+                LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
+                WHERE lists.owner_id = $2 OR shared_lists.user_id = $2
+            ) RETURNING *`,
+            [itemId, userId]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer': error);
+        throw new ApiError(500, 'Failed to delete item');
+    }
+};
+
+
 module.exports = {
     getUserLists, 
     createList,
     deleteList,
+    getListItems,
+    addItemToList,
+    updateItem,
+    deleteItem,
 };
