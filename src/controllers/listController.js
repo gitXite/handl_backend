@@ -3,15 +3,12 @@ const ApiError = require('../utils/ApiError');
 
 
 const getLists = async (req, res) => {
-    if (!req.user?.id) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
     try {
         const lists = await listService.getUserLists(req.user.id);
         res.status(200).json(lists);
     } catch (error) {
         console.error('Error fetching lists:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to retrieve lists' });
@@ -19,8 +16,6 @@ const getLists = async (req, res) => {
 };
 
 const createList = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-    
     const { name } = req.body;
     if (!name) {
         return res.status(400).json({ message: 'List name is required' });
@@ -31,16 +26,36 @@ const createList = async (req, res) => {
         res.status(201).json(newList);
     } catch (error) {
         console.error('Error creating list:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to create list' });
     }
 };
 
+const renameList = async (req, res) => {
+    const { listId } = req.params;
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ message: 'List name is required' });
+    }
+
+    try {
+        const renamedList = await listService.renameList(req.user.id, listId, name);
+        if (!renamedList) {
+            return res.status(404).json({ message: 'List to rename not found' });
+        }
+        res.status(200).json({ message: 'List renamed successfully', renamedList });
+    } catch (error) {
+        console.error('Error renaming list:', error);
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to rename list' });
+    }
+};
+
 const deleteList = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-    
     const { listId } = req.params;
     try {
         const deletedList = await listService.deleteList(req.user.id, listId);
@@ -50,7 +65,7 @@ const deleteList = async (req, res) => {
         res.status(200).json({ message: 'List deleted successfully' });
     } catch (error) {
         console.error('Error deleting list:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to delete list' });
@@ -59,15 +74,13 @@ const deleteList = async (req, res) => {
 
 
 const getItems = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { listId } = req.params;
     try {
         const items = await listService.getListItems(listId, req.user.id);
         res.status(200).json(items);
     } catch (error) {
         console.error('Error fetching items:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to get items' });
@@ -75,8 +88,6 @@ const getItems = async (req, res) => {
 };
 
 const addItem = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { listId } = req.params;
     const { name, quantity } = req.body;
     if (!name || quantity === 0) {
@@ -92,7 +103,7 @@ const addItem = async (req, res) => {
         res.status(201).json(newItem);
     } catch (error) {
         console.error('Error adding item:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to add item' });
@@ -100,8 +111,6 @@ const addItem = async (req, res) => {
 };
 
 const updateItem = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { itemId } = req.params;
     const { name, quantity } = req.body;
     if (!name || quantity == null) {
@@ -117,7 +126,7 @@ const updateItem = async (req, res) => {
         res.status(200).json(updatedItem);
     } catch (error) {
         console.error('Error updating item:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to update item' });
@@ -125,8 +134,6 @@ const updateItem = async (req, res) => {
 };
 
 const deleteItem = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { itemId } = req.params;
     try {
         const deletedItem = await listService.deleteItem(itemId, req.user.id);
@@ -137,7 +144,7 @@ const deleteItem = async (req, res) => {
         res.status(200).json({ message: 'Item deleted successfully' });
     } catch (error) {
         console.error('Error deleting item:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to delete item' });
@@ -146,8 +153,6 @@ const deleteItem = async (req, res) => {
 
 
 const shareList = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { listId } = req.params;
     const { email } = req.body;
     if (!email) {
@@ -163,7 +168,7 @@ const shareList = async (req, res) => {
         res.status(200).json({ message: 'List shared successfully', sharedList });
     } catch (error) {
         console.error('Error sharing list:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to share list' });
@@ -171,15 +176,13 @@ const shareList = async (req, res) => {
 };
 
 const getSharedUsers = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { listId } = req.params;
     try {
         const users = await listService.getSharedUsers(listId, req.user.id);
         res.status(200).json(users);
     } catch (error) {
         console.error('Error fetching shared users:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to retrieve shared users' });
@@ -187,8 +190,6 @@ const getSharedUsers = async (req, res) => {
 };
 
 const removeSharedUser = async (req, res) => {
-    if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized' });
-
     const { listId, targetUserId } = req.params;
     try {
         const removedUser = await listService.removeSharedUser(listId, req.user.id, targetUserId);
@@ -199,7 +200,7 @@ const removeSharedUser = async (req, res) => {
         res.status(200).json({ message: 'Shared user removed successfully', removedUser });
     } catch (error) {
         console.error('Error removing shared user:', error);
-        if (error instanceOf ApiError) {
+        if (error instanceof ApiError) {
             return res.status(error.status).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to remove shared user' });
@@ -210,6 +211,7 @@ const removeSharedUser = async (req, res) => {
 module.exports = {
     getLists, 
     createList,
+    renameList,
     deleteList,
     getItems,
     addItem,
