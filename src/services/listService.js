@@ -169,7 +169,7 @@ const getSharedUsers = async (listId, userId) => {
         if (listCheck.rowCount === 0) return [];
 
         const sharedUsers = await pool.query(
-            `SELECT users.email 
+            `SELECT users.id, users.email 
              FROM users 
              JOIN shared_lists ON users.id = shared_lists.user_id 
              WHERE shared_lists.list_id = $1`,
