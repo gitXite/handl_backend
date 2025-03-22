@@ -11,7 +11,7 @@ router.patch('/:listId/rename', authMiddleware.isAuthenticated, listController.r
 router.delete('/:listId', authMiddleware.isAuthenticated, listController.deleteList);
 
 router.post('/:listId/share', authMiddleware.isAuthenticated, listController.shareList);
-router.get('/listId/shared-users', authMiddleware.isAuthenticated, listController.getSharedUsers);
+router.get('/:listId/shared-users', authMiddleware.isAuthenticated, listController.getSharedUsers);
 router.delete('/:listId/unshare/:targetUserId', authMiddleware.isAuthenticated, listController.removeSharedUser);
 
 router.get('/:listId/items', authMiddleware.isAuthenticated, listController.getItems);
