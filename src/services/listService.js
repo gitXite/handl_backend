@@ -6,7 +6,6 @@ const getUserLists = async (userId) => {
     try {
         const ownedLists = await pool.query('SELECT * FROM lists WHERE owner_id = $1', [userId]);
         const sharedLists = await pool.query('SELECT lists.* FROM lists JOIN shared_lists ON lists.id = shared_lists.list_id WHERE shared_lists.user_id = $1', [userId]);
-    
         return [...ownedLists.rows, ...sharedLists.rows];
     } catch (error) {
         console.error('Database error in service layer:', error);
@@ -21,6 +20,22 @@ const createList = async (userId, name) => {
     } catch (error) {
         console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to create list in database');
+    }
+};
+
+const renameList = async (userId, listId, name) => {
+    try {
+        const result = await pool.query(
+            `UPDATE lists SET name = $1 WHERE id = $2 AND owner_id = $3`,
+            [name, listId, userId]
+        );
+        if (result.rowCount === 0) {
+            throw new ApiError(404, 'List not found or user is not the owner');
+        }
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer:', error);
+        throw new ApiError(500, 'Failed to rename list in database');
     }
 };
 
@@ -180,7 +195,6 @@ const removeSharedUser = async (listId, userId, targetUserId) => {
             [listId, targetUserId]
         );
         if (result.rowCount === 0) return null;
-
         return result.rows[0];
     } catch (error) {
         console.error('Database error in service layer': error);
@@ -192,6 +206,7 @@ const removeSharedUser = async (listId, userId, targetUserId) => {
 module.exports = {
     getUserLists, 
     createList,
+    renameList, 
     deleteList,
     getListItems,
     addItemToList,
