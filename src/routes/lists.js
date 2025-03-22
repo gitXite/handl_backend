@@ -7,6 +7,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 // Endpoint: /api/lists/
 router.get('/', authMiddleware.isAuthenticated, listController.getLists);
 router.post('/', authMiddleware.isAuthenticated, listController.createList);
+router.patch('/:listId/rename', authMiddleware.isAuthenticated, listController.renameList);
 router.delete('/:listId', authMiddleware.isAuthenticated, listController.deleteList);
 
 router.post('/:listId/share', authMiddleware.isAuthenticated, listController.shareList);
