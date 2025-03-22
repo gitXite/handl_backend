@@ -26,7 +26,7 @@ const createList = async (userId, name) => {
 const renameList = async (userId, listId, name) => {
     try {
         const result = await pool.query(
-            `UPDATE lists SET name = $1 WHERE id = $2 AND owner_id = $3`,
+            `UPDATE lists SET name = $1 WHERE id = $2 AND owner_id = $3 RETURNING name`,
             [name, listId, userId]
         );
         if (result.rowCount === 0) {
