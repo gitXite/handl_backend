@@ -32,7 +32,7 @@ const renameList = async (userId, listId, name) => {
         if (result.rowCount === 0) {
             throw new ApiError(404, 'List not found or user is not the owner');
         }
-        return result.rows[0];
+        return result.rows[0].name;
     } catch (error) {
         console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to rename list in database');
