@@ -35,8 +35,7 @@ const createList = async (req, res) => {
 };
 
 const renameList = async (req, res) => {
-    const { listId } = req.params;
-    const { name } = req.body;
+    const { name, listId } = req.body;
     if (!name) {
         return res.status(400).json({ message: 'List name is required' });
     }
