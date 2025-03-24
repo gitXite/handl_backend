@@ -79,6 +79,13 @@ const deleteList = async (req, res) => {
             return res.status(404).json({ message: 'List to be deleted not found' });
         }
         console.log('List deleted:', deletedList.name);
+
+        broadcastEvent({
+            type: 'LIST_DELETED',
+            listId: listId,
+            userId: req.user.id
+        });
+
         res.status(200).json({ message: 'List deleted successfully' });
     } catch (error) {
         console.error('Error deleting list:', error);
@@ -208,7 +215,7 @@ const shareList = async (req, res) => {
             recipient: email,
         });
 
-        res.status(200).json({ message: 'List shared successfully', sharedList });
+        res.status(200).json({ message: 'List shared successfully', list: sharedList });
     } catch (error) {
         console.error('Error sharing list:', error);
         if (error instanceof ApiError) {
