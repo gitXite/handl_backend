@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { sseHandler } = require('../controllers/sseController');
 
-// Endpoint: /api/events/
+// Endpoint: /api/stream/
 router.get('/', sseHandler);
 
 
