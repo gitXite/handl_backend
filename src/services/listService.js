@@ -13,6 +13,19 @@ const getUserLists = async (userId) => {
     }
 };
 
+const getListNameById = async (listId) => {
+    try {
+        const result = await pool.query('SELECT name FROM lists WHERE id = $1', [listId]);
+        if (result.rows.length === 0) {
+            throw new ApiError(404, 'List not found');
+        }
+        return result.rows[0].name;
+    } catch (error) {
+        console.error('Database error in service layer:', error);
+        throw new ApiError(500, 'Failed to get name of list');
+    }
+};
+
 const createList = async (userId, name) => {
     try {
         const result = await pool.query('INSERT INTO lists (owner_id, name) VALUES ($1, $2) RETURNING *', [userId, name]);
@@ -205,6 +218,7 @@ const removeSharedUser = async (listId, userId, targetUserId) => {
 
 module.exports = {
     getUserLists, 
+    getListNameById,
     createList,
     renameList, 
     deleteList,

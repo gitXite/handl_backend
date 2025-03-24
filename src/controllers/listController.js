@@ -15,6 +15,20 @@ const getLists = async (req, res) => {
     }
 };
 
+const getListName = async (req, res) => {
+    const { listId } = req.params;
+    try {
+        const listName = await listService.getListNameById(listId);
+        res.status(200).json({ name: listName })
+    } catch (error) {
+        console.error('Error retrieving list name:', error);
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to retrieve list name' });
+    }
+};
+
 const createList = async (req, res) => {
     const { name } = req.body;
     if (!name) {
@@ -212,6 +226,7 @@ const removeSharedUser = async (req, res) => {
 
 module.exports = {
     getLists, 
+    getListName,
     createList,
     renameList,
     deleteList,
