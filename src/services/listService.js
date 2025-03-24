@@ -158,10 +158,16 @@ const shareList = async (listId, userId, email) => {
         if (recipient.rowCount === 0) return null;
 
         const result = await pool.query(
-            `INSERT INTO shared_lists (list_id, user_id) VALUES ($1, $2) RETURNING *`,
+            `INSERT INTO shared_lists (list_id, user_id) VALUES ($1, $2) RETURNING list_id`,
             [listId, recipient.rows[0].id]
         );
-        return result.rows[0];
+        const sharedListId = result.rows[0].list_id;
+
+        const listDetails = await pool.query(
+            `SELECT id, name, owner_id, created_at FROM lists WHERE id = $1`,
+            [sharedListId]
+        );
+        return listDetails.rows[0];
     } catch (error) {
         console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to share list');
@@ -208,7 +214,14 @@ const removeSharedUser = async (listId, userId, targetUserId) => {
             [listId, targetUserId]
         );
         if (result.rowCount === 0) return null;
-        return result.rows[0];
+        const sharedListId = result.rows[0].list_id;
+
+        const listDetails = await pool.query(
+            `SELECT id, name, owner_id, created_at FROM lists WHERE id = $1`,
+            [sharedListId]
+        );
+
+        return listDetails.rows[0];
     } catch (error) {
         console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to remove shared user');

@@ -82,10 +82,11 @@ const deleteList = async (req, res) => {
 
         broadcastEvent({
             type: 'LIST_DELETED',
+            list: deletedList,
             listId: listId,
         });
 
-        res.status(200).json({ message: 'List deleted successfully' });
+        res.status(200).json({ message: 'List deleted successfully', listId});
     } catch (error) {
         console.error('Error deleting list:', error);
         if (error instanceof ApiError) {
@@ -208,12 +209,10 @@ const shareList = async (req, res) => {
         if (!sharedList) {
             return res.status(403).json({ message: 'You are not authorized to share this list or user does not exist' });
         }
-        const listName = await listService.getListNameById(listId);
 
         broadcastEvent({
             type: 'LIST_SHARED',
             list: sharedList,
-            listName: listName,
             recipient: email,
         });
 
