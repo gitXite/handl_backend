@@ -23,6 +23,7 @@ const createList = async (req, res) => {
     
     try {
         const newList = await listService.createList(req.user.id, name);
+        console.log('New list created:', name);
         res.status(201).json(newList);
     } catch (error) {
         console.error('Error creating list:', error);
@@ -45,6 +46,7 @@ const renameList = async (req, res) => {
         if (!renamedList) {
             return res.status(404).json({ message: 'List to rename not found' });
         }
+        console.log('List renamed to:', name);
         res.status(200).json({ message: 'List renamed successfully', renamedList });
     } catch (error) {
         console.error('Error renaming list:', error);
@@ -62,6 +64,7 @@ const deleteList = async (req, res) => {
         if (!deletedList) {
             return res.status(404).json({ message: 'List to be deleted not found' });
         }
+        console.log('List deleted:', deletedList.name);
         res.status(200).json({ message: 'List deleted successfully' });
     } catch (error) {
         console.error('Error deleting list:', error);
