@@ -207,10 +207,12 @@ const shareList = async (req, res) => {
         if (!sharedList) {
             return res.status(403).json({ message: 'You are not authorized to share this list or user does not exist' });
         }
+        const listName = await listService.getListNameById(listId);
 
         broadcastEvent({
             type: 'LIST_SHARED',
             list: sharedList,
+            listName: listName,
             recipient: email,
         });
 
@@ -249,7 +251,7 @@ const removeSharedUser = async (req, res) => {
         broadcastEvent({
             type: 'USER_REMOVED',
             list: listId,
-            recipient: removedUser,
+            recipient: removedUser.user_id,
         })
 
         res.status(200).json({ message: 'Shared user removed successfully', removedUser });
