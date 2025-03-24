@@ -63,7 +63,7 @@ const getListItems = async (listId, userId) => {
         );
         return result.rows;
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to retrieve items');
     }
 };
@@ -83,7 +83,7 @@ const addItemToList = async (listId, userId, name, quantity) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to add item');
     }
 };
@@ -103,7 +103,7 @@ const updateItem = async (itemId, userId, name, quantity) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to update item');
     }
 };
@@ -122,7 +122,7 @@ const deleteItem = async (itemId, userId) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to delete item');
     }
 };
@@ -150,7 +150,7 @@ const shareList = async (listId, userId, email) => {
         );
         return result.rows[0];
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to share list');
     }
 };
@@ -177,7 +177,7 @@ const getSharedUsers = async (listId, userId) => {
         );
         return sharedUsers.rows;
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to get shared users');
     }
 };
@@ -197,7 +197,7 @@ const removeSharedUser = async (listId, userId, targetUserId) => {
         if (result.rowCount === 0) return null;
         return result.rows[0];
     } catch (error) {
-        console.error('Database error in service layer': error);
+        console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to remove shared user');
     }
 };
