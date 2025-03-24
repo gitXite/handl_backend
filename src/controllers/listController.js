@@ -156,6 +156,7 @@ const updateItem = async (req, res) => {
         broadcastEvent({
             type: 'ITEM_UPDATED',
             item: updatedItem,
+            listId: updatedItem.list_id,
             updatedBy: req.user.id,
         });
 
@@ -180,7 +181,7 @@ const deleteItem = async (req, res) => {
         broadcastEvent({
             type: 'ITEM_DELETED',
             item: deletedItem,
-            listId: deletedItem.listId,
+            listId: deletedItem.list_id,
             deletedBy: req.user.id,
         });
 
@@ -250,7 +251,7 @@ const removeSharedUser = async (req, res) => {
 
         broadcastEvent({
             type: 'USER_REMOVED',
-            list: listId,
+            listId: listId,
             recipient: removedUser.user_id,
         })
 
