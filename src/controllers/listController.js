@@ -174,6 +174,7 @@ const deleteItem = async (req, res) => {
         broadcastEvent({
             type: 'ITEM_DELETED',
             item: deletedItem,
+            listId: deletedItem.listId,
             deletedBy: req.user.id,
         });
 
