@@ -55,7 +55,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/lists', listRoutes);
-app.use('/api/stream', sseRoutes);
+app.use('/api/events', sseRoutes);
 app.use('/api/password', passwordRoutes);
 
 

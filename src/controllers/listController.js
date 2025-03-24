@@ -1,5 +1,6 @@
 const listService = require('../services/listService');
 const ApiError = require('../utils/ApiError');
+const { broadcastEvent } = require('./sseController');
 
 
 const getLists = async (req, res) => {
@@ -116,6 +117,13 @@ const addItem = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to add items to this list' });
         }
 
+        broadcastEvent({
+            type: 'ITEM_ADDED',
+            item: newItem,
+            listId: listId,
+            createdBy: req.user.id,
+        });
+
         res.status(201).json(newItem);
     } catch (error) {
         console.error('Error adding item:', error);
@@ -139,6 +147,12 @@ const updateItem = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to update this item' });
         }
 
+        broadcastEvent({
+            type: 'ITEM_UPDATED',
+            item: updatedItem,
+            updatedBy: req.user.id,
+        });
+
         res.status(200).json(updatedItem);
     } catch (error) {
         console.error('Error updating item:', error);
@@ -156,6 +170,12 @@ const deleteItem = async (req, res) => {
         if (!deletedItem) {
             return res.status(403).json({ message: 'Not authorized to delete this item' });
         }
+
+        broadcastEvent({
+            type: 'ITEM_DELETED',
+            item: deletedItem,
+            deletedBy: req.user.id,
+        });
 
         res.status(200).json({ message: 'Item deleted successfully' });
     } catch (error) {
@@ -180,6 +200,12 @@ const shareList = async (req, res) => {
         if (!sharedList) {
             return res.status(403).json({ message: 'You are not authorized to share this list or user does not exist' });
         }
+
+        broadcastEvent({
+            type: 'LIST_SHARED',
+            list: sharedList,
+            recipient: email,
+        });
 
         res.status(200).json({ message: 'List shared successfully', sharedList });
     } catch (error) {
@@ -212,6 +238,12 @@ const removeSharedUser = async (req, res) => {
         if (!removedUser) {
             return res.status(403).json({ message: 'You are not authorized to remove this user or no such share exists' });
         }
+
+        broadcastEvent({
+            type: 'USER_REMOVED',
+            list: listId,
+            recipient: removedUser,
+        })
 
         res.status(200).json({ message: 'Shared user removed successfully', removedUser });
     } catch (error) {
