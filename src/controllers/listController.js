@@ -83,7 +83,6 @@ const deleteList = async (req, res) => {
         broadcastEvent({
             type: 'LIST_DELETED',
             listId: listId,
-            userId: req.user.id
         });
 
         res.status(200).json({ message: 'List deleted successfully' });
