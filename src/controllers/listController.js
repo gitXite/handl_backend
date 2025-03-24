@@ -243,15 +243,16 @@ const getSharedUsers = async (req, res) => {
 const removeSharedUser = async (req, res) => {
     const { listId, targetUserId } = req.params;
     try {
-        const removedUser = await listService.removeSharedUser(listId, req.user.id, targetUserId);
+        const removedList = await listService.removeSharedUser(listId, req.user.id, targetUserId);
         if (!removedUser) {
             return res.status(403).json({ message: 'You are not authorized to remove this user or no such share exists' });
         }
 
         broadcastEvent({
             type: 'USER_REMOVED',
+            list: removedList,
             listId: listId,
-            recipient: removedUser.user_id,
+            recipient: removedList.user_id,
         })
 
         res.status(200).json({ message: 'Shared user removed successfully', removedUser });
