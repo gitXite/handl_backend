@@ -158,7 +158,7 @@ const shareList = async (listId, userId, email) => {
 const getSharedUsers = async (listId, userId) => {
     try {
         // Check ownership or access
-        const listCheck = await db.query(
+        const listCheck = await pool.query(
             `SELECT id FROM lists 
             WHERE id = $1 AND (owner_id = $2 OR EXISTS (
                 SELECT 1 FROM shared_lists 
@@ -184,13 +184,13 @@ const getSharedUsers = async (listId, userId) => {
 
 const removeSharedUser = async (listId, userId, targetUserId) => {
     try {
-        const listCheck = await db.query(
+        const listCheck = await pool.query(
             `SELECT id FROM lists WHERE id = $1 AND owner_id = $2`,
             [listId, userId]
         );
         if (listCheck.rowCount === 0) return null;
 
-        const result = await db.query(
+        const result = await pool.query(
             'DELETE FROM shared_lists WHERE list_id = $1 AND user_id = $2 RETURNING *',
             [listId, targetUserId]
         );
