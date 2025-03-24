@@ -58,7 +58,7 @@ const getListItems = async (listId, userId) => {
             JOIN lists ON items.list_id = lists.id
             LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
             WHERE items.list_id = $1
-            AND (lists.owner_id = $2 OR shared_lists.user_id = $2`, 
+            AND (lists.owner_id = $2 OR shared_lists.user_id = $2)`, 
             [listId, userId]
         );
         return result.rows;
