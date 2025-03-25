@@ -236,6 +236,13 @@ const getSharedUsers = async (req, res) => {
     const { listId } = req.params;
     try {
         const users = await listService.getSharedUsers(listId, req.user.id);
+        const sharedNumber = users.length;
+
+        broadcastEvent({
+            type: 'SHARED_NUMBER',
+            sharedNumber: sharedNumber,
+        });
+        
         res.status(200).json(users);
     } catch (error) {
         console.error('Error fetching shared users:', error);
