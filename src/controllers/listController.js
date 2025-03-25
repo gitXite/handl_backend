@@ -91,7 +91,7 @@ const deleteList = async (req, res) => {
             list: deletedList,
         });
 
-        res.status(200).json({ message: 'List deleted successfully', listId});
+        res.status(200).json({ message: 'List deleted successfully', deletedList });
     } catch (error) {
         console.error('Error deleting list:', error);
         if (error instanceof ApiError) {
