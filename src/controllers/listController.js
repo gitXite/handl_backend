@@ -61,6 +61,12 @@ const renameList = async (req, res) => {
             return res.status(404).json({ message: 'List to rename not found' });
         }
         console.log('List renamed to:', name);
+
+        broadcastEvent({
+            type: 'RENAME_LIST',
+            list: renamedList,
+        });
+
         res.status(200).json({ message: 'List renamed successfully', renamedList });
     } catch (error) {
         console.error('Error renaming list:', error);

@@ -39,13 +39,13 @@ const createList = async (userId, name) => {
 const renameList = async (userId, listId, name) => {
     try {
         const result = await pool.query(
-            `UPDATE lists SET name = $1 WHERE id = $2 AND owner_id = $3 RETURNING name`,
+            `UPDATE lists SET name = $1 WHERE id = $2 AND owner_id = $3 RETURNING *`,
             [name, listId, userId]
         );
         if (result.rowCount === 0) {
             throw new ApiError(404, 'List not found or user is not the owner');
         }
-        return result.rows[0].name;
+        return result.rows[0];
     } catch (error) {
         console.error('Database error in service layer:', error);
         throw new ApiError(500, 'Failed to rename list in database');
