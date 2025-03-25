@@ -55,6 +55,9 @@ const renameList = async (userId, listId, name) => {
 const deleteList = async (userId, listId) => {
     try {
         const result = await pool.query('DELETE FROM lists WHERE id = $1 AND owner_id = $2 RETURNING *', [listId, userId]);
+        if (result.rowCount === 0) {
+            throw new ApiError(404, 'List not found or user is not the owner');
+        }
         return result.rows[0];
     } catch (error) {
         console.error('Database error in service layer:');
