@@ -130,7 +130,7 @@ const addItem = async (req, res) => {
         }
 
         broadcastEvent({
-            type: 'ITEM_ADDED',
+            type: 'ADD_ITEM',
             item: newItem,
             listId: listId,
             createdBy: req.user.id,
@@ -160,7 +160,7 @@ const updateItem = async (req, res) => {
         }
 
         broadcastEvent({
-            type: 'ITEM_UPDATED',
+            type: 'UPDATE_ITEM',
             item: updatedItem,
             listId: updatedItem.list_id,
             updatedBy: req.user.id,
@@ -185,7 +185,7 @@ const deleteItem = async (req, res) => {
         }
 
         broadcastEvent({
-            type: 'ITEM_DELETED',
+            type: 'DELETE_ITEM',
             item: deletedItem,
             listId: deletedItem.list_id,
             deletedBy: req.user.id,
@@ -216,7 +216,7 @@ const shareList = async (req, res) => {
         }
 
         broadcastEvent({
-            type: 'LIST_SHARED',
+            type: 'SHARE_LIST',
             list: sharedList,
             recipient: email,
         });
