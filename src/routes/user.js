@@ -5,7 +5,7 @@ const authController = require('../controllers/authController');
 
 
 // Endpoint: /api/user/
-router.get('/:userId/profile', authMiddleware.isAuthenticated, authController.getProfile);
+router.get('/profile/:userId', authMiddleware.isAuthenticated, authController.getProfile);
 
 
 module.exports = router;
