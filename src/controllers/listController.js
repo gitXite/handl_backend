@@ -261,7 +261,7 @@ const removeSharedUser = async (req, res) => {
         }
 
         broadcastEvent({
-            type: 'USER_REMOVED',
+            type: 'REMOVE_USER',
             list: removedList,
             recipientId: targetUserId,
         })
