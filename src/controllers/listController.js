@@ -257,8 +257,7 @@ const removeSharedUser = async (req, res) => {
         broadcastEvent({
             type: 'USER_REMOVED',
             list: removedList,
-            listId: listId,
-            recipient: removedList.user_id,
+            recipient: targetUserId,
         })
 
         res.status(200).json({ message: 'Shared user removed successfully', removedList });
