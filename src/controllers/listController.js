@@ -87,9 +87,8 @@ const deleteList = async (req, res) => {
         console.log('List deleted:', deletedList.name);
 
         broadcastEvent({
-            type: 'LIST_DELETED',
+            type: 'DELETE_LIST',
             list: deletedList,
-            listId: listId,
         });
 
         res.status(200).json({ message: 'List deleted successfully', listId});
@@ -264,7 +263,7 @@ const removeSharedUser = async (req, res) => {
         broadcastEvent({
             type: 'USER_REMOVED',
             list: removedList,
-            recipient: targetUserId,
+            recipientId: targetUserId,
         })
 
         res.status(200).json({ message: 'Shared user removed successfully', removedList });
