@@ -3,7 +3,8 @@
 // Check if session is authenticated
 const checkSession = (req, res) => {
     if (req.isAuthenticated()) {
-        return res.json({ isAuthenticated: true, user: req.name });
+        const { password, ...userWithoutPassword } = req.user; // Assuming password is in req.user
+        return res.json({ isAuthenticated: true, user: userWithoutPassword });
     } else {
         return res.json({ isAuthenticated: false });
     }
