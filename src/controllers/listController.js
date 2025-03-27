@@ -238,7 +238,9 @@ const getSharedUsers = async (req, res) => {
         const sharedNumber = users.length;
 
         broadcastEvent({
-            type: 'SHARED_NUMBER',
+            type: 'SHARED_USERS_UPDATED',
+            sharedUsers: users,
+            listId: listId,
             sharedNumber: sharedNumber,
         });
         
