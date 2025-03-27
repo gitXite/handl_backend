@@ -193,7 +193,7 @@ const checkItem = async (req, res) => {
         broadcastEvent({
             type: 'CHECK_ITEM',
             checkStatus: updatedItem.checked,
-            listId: updatedItem.list_id,
+            itemId: updatedItem.id,
         });
 
         res.status(200).json(updatedItem);
