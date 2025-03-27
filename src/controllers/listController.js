@@ -177,10 +177,10 @@ const updateItem = async (req, res) => {
 };
 
 const getCheckedState = async (req, res) => {
-    const { listId, itemId } = req.params;
+    const { itemId } = req.params;
 
     try {
-        const isChecked = await listService.getCheckedState(itemId, req.user.id, listId);
+        const isChecked = await listService.getCheckedState(itemId, req.user.id);
         if (!isChecked) {
             res.status(404).json({ message: 'Item not found' });
         }
