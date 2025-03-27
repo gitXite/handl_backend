@@ -158,7 +158,7 @@ const shareList = async (listId, userId, email) => {
             'SELECT id FROM users WHERE email = $1',
             [email]
         );
-        if (recipient.rowCount === 0) return null;
+        if (recipient.rowCount === 0 || recipient.rows[0].id === userId) return null;
 
         const result = await pool.query(
             `INSERT INTO shared_lists (list_id, user_id) VALUES ($1, $2) RETURNING list_id`,
