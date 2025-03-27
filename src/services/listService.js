@@ -124,6 +124,26 @@ const updateItem = async (itemId, userId, name, quantity) => {
     }
 };
 
+const checkItem = async (itemId, userId, checked) => {
+    try {
+        const result = await pool.query(
+            `UPDATE items
+            SET checked = $1
+            WHERE id = $2
+            AND list_id IN (
+                SELECT lists.id FROM lists
+                LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
+                WHERE lists.owner_id = $3 OR shared_lists.user_id = $3
+            ) RETURNING id, checked`,
+            [checked, itemId, userId]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer:', error);
+        throw new ApiError(500, 'Failed to update item');
+    }
+};
+
 const deleteItem = async (itemId, userId) => {
     try {
         const result = await pool.query(
@@ -241,6 +261,7 @@ module.exports = {
     getListItems,
     addItemToList,
     updateItem,
+    checkItem, 
     deleteItem,
     shareList,
     getSharedUsers,
