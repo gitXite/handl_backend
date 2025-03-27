@@ -148,13 +148,13 @@ const addItem = async (req, res) => {
 
 const updateItem = async (req, res) => {
     const { itemId } = req.params;
-    const { name, quantity } = req.body;
+    const { name, quantity, checked } = req.body;
     if (!name || quantity == null) {
         return res.status(400).json({ message: 'Item name and quantity are required' });
     }
 
     try {
-        const updatedItem = await listService.updateItem(itemId, req.user.id, name, quantity);
+        const updatedItem = await listService.updateItem(itemId, req.user.id, name, quantity, checked);
         if (!updatedItem) {
             return res.status(403).json({ message: 'Not authorized to update this item' });
         }
