@@ -318,6 +318,7 @@ module.exports = {
     getItems,
     addItem,
     updateItem,
+    checkItem,
     deleteItem,
     shareList,
     getSharedUsers,
