@@ -124,6 +124,26 @@ const updateItem = async (itemId, userId, name, quantity) => {
     }
 };
 
+const getCheckedState = async (itemId, userId) => {
+    try {
+        const result = await pool.query(
+            `SELECT checked FROM items
+            WHERE id = $1
+            AND list_id IN (
+                SELECT lists.id FROM lists
+                LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
+                WHERE lists.owner_id = $2 OR shared_lists.user_id = $2
+            )`,
+            [itemId, userId]
+        );
+        if (result.rowCount === 0) return null;
+        return result.rows[0];
+    } catch (error) {
+        console.error('Database error in service layer:', error);
+        throw new ApiError(500, 'Failed to get checked status');
+    }
+};
+
 const checkItem = async (itemId, userId, checked) => {
     try {
         const result = await pool.query(
@@ -261,6 +281,7 @@ module.exports = {
     getListItems,
     addItemToList,
     updateItem,
+    getCheckedState,
     checkItem, 
     deleteItem,
     shareList,
