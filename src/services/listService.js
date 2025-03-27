@@ -104,18 +104,18 @@ const addItemToList = async (listId, userId, name, quantity) => {
     }
 };
 
-const updateItem = async (itemId, userId, name, quantity) => {
+const updateItem = async (itemId, userId, name, quantity, checked) => {
     try {
         const result = await pool.query(
             `UPDATE items
-            SET name = $1, quantity = $2
+            SET name = $1, quantity = $2, checked = $5
             WHERE id = $3
             AND list_id IN (
                 SELECT lists.id FROM lists
                 LEFT JOIN shared_lists ON lists.id = shared_lists.list_id
                 WHERE lists.owner_id = $4 OR shared_lists.user_id = $4
             ) RETURNING *`,
-            [name, quantity, itemId, userId]
+            [name, quantity, itemId, userId, checked]
         );
         return result.rows[0];
     } catch (error) {
