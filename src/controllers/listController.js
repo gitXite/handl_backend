@@ -180,6 +180,10 @@ const checkItem = async (req, res) => {
     const { itemId } = req.params;
     const { checked } = req.body;
 
+    if (typeof checked !== 'boolean') {
+        res.status(400).json({ message: 'Invalid checked status' });
+    }
+
     try {
         const updatedItem = await listService.checkItem(itemId, req.user.id, checked);
         if (!updatedItem) {
@@ -188,7 +192,7 @@ const checkItem = async (req, res) => {
 
         broadcastEvent({
             type: 'CHECK_ITEM',
-            item: updatedItem,
+            checkStatus: updatedItem.checked,
             listId: updatedItem.list_id,
         });
 
