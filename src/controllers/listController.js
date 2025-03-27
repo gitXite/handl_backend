@@ -176,6 +176,32 @@ const updateItem = async (req, res) => {
     }
 };
 
+const checkItem = async (req, res) => {
+    const { itemId } = req.params;
+    const { checked } = req.body;
+
+    try {
+        const updatedItem = await listService.checkItem(itemId, req.user.id, checked);
+        if (!updatedItem) {
+            return res.status(403).json({ message: 'Not authorized to update this item' });
+        }
+
+        broadcastEvent({
+            type: 'CHECK_ITEM',
+            item: updatedItem,
+            listId: updatedItem.list_id,
+        });
+
+        res.status(200).json(updatedItem);
+    } catch (error) {
+        console.error('Error updating item:', error);
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to update item' });
+    }
+};
+
 const deleteItem = async (req, res) => {
     const { itemId } = req.params;
     try {
