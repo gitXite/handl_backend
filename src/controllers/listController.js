@@ -336,6 +336,7 @@ module.exports = {
     getItems,
     addItem,
     updateItem,
+    getCheckedState,
     checkItem,
     deleteItem,
     shareList,
