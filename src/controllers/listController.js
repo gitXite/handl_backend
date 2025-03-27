@@ -176,6 +176,24 @@ const updateItem = async (req, res) => {
     }
 };
 
+const getCheckedState = async (req, res) => {
+    const { listId, itemId } = req.params;
+
+    try {
+        const isChecked = await listService.getCheckedState(itemId, req.user.id, listId);
+        if (!isChecked) {
+            res.status(404).json({ message: 'Item not found' });
+        }
+        res.status(200).json({ checked: result.checked });
+    } catch (error) {
+        console.error('Error fetching checked state:', error);
+        if (error instanceof ApiError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to get checked state' });
+    }
+};
+
 const checkItem = async (req, res) => {
     const { itemId } = req.params;
     const { checked } = req.body;
