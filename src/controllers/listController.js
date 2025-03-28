@@ -146,7 +146,7 @@ const addItem = async (req, res) => {
     }
 };
 
-const updateItem = async (req, res) => {
+const editItem = async (req, res) => {
     const { itemId } = req.params;
     const { name, quantity } = req.body;
     if (!name || quantity == null) {
@@ -154,13 +154,13 @@ const updateItem = async (req, res) => {
     }
 
     try {
-        const updatedItem = await listService.updateItem(itemId, req.user.id, name, quantity);
+        const updatedItem = await listService.editItem(itemId, req.user.id, name, quantity);
         if (!updatedItem) {
-            return res.status(403).json({ message: 'Not authorized to update this item' });
+            return res.status(403).json({ message: 'Not authorized to edit this item' });
         }
 
         broadcastEvent({
-            type: 'UPDATE_ITEM',
+            type: 'EDIT_ITEM',
             item: updatedItem,
             listId: updatedItem.list_id,
             updatedBy: req.user.id,
@@ -335,7 +335,7 @@ module.exports = {
     deleteList,
     getItems,
     addItem,
-    updateItem,
+    editItem,
     getCheckedState,
     checkItem,
     deleteItem,
