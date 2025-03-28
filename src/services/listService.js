@@ -104,7 +104,7 @@ const addItemToList = async (listId, userId, name, quantity) => {
     }
 };
 
-const updateItem = async (itemId, userId, name, quantity) => {
+const editItem = async (itemId, userId, name, quantity) => {
     try {
         const result = await pool.query(
             `UPDATE items
@@ -280,7 +280,7 @@ module.exports = {
     deleteList,
     getListItems,
     addItemToList,
-    updateItem,
+    editItem,
     getCheckedState,
     checkItem, 
     deleteItem,
