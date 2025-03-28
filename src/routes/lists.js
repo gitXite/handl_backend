@@ -17,7 +17,7 @@ router.delete('/:listId/unshare/:targetUserId', authMiddleware.isAuthenticated, 
 
 router.get('/:listId/items', authMiddleware.isAuthenticated, listController.getItems);
 router.post('/:listId/items', authMiddleware.isAuthenticated, listController.addItem);
-router.patch('/:listId/items/:itemId', authMiddleware.isAuthenticated, listController.updateItem);
+router.patch('/:listId/items/:itemId', authMiddleware.isAuthenticated, listController.editItem);
 router.get('/:listId/items/:itemId/check', authMiddleware.isAuthenticated, listController.getCheckedState);
 router.patch('/:listId/items/:itemId/check', authMiddleware.isAuthenticated, listController.checkItem);
 router.delete('/:listId/items/:listId', authMiddleware.isAuthenticated, listController.deleteItem);
