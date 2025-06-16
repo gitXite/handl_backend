@@ -1,6 +1,7 @@
 # Handl — Backend
+## //IN PROGRESS//
 
-Backend repository for **Handl**, a collaborative full-stack shopping list web application.
+Backend repository for **Handl**, a full-stack collaborative shopping list web application.
 
 ## ⚙️ Tech Stack
 
