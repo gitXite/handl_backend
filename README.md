@@ -11,6 +11,41 @@ Backend repository for **Handl**, a collaborative full-stack shopping list web a
 - SSE (Server-Sent Events for real-time updates)
 - REST API
 
+## 🧑‍💻 Getting Started
+
+### Prerequisites
+
+- PostgreSQL database
+- Node.js (v18+)
+- `.env` file with required variables
+
+### Installation
+
+```bash
+git clone https://github.com/gitXite/handl_backend.git
+cd handl_backend
+npm install
+```
+
+The app can be installed locally as a progressive web app (PWA). 
+
+### Environment Setup
+
+Create a `.env` file in the root with the following:
+```
+PORT=5000
+SESSION_SECRET=your_secret
+DATABASE_URL=postgresql://user:pass@localhost:5432/handl
+EMAIL_USER=you@example.com
+EMAIL_PASS=yourpassword
+CLIENT_URL=http://localhost:3000
+```
+
+### Running the App
+```bash
+npm run dev
+```
+
 ## 📂 Project Structure
 
 ```plaintext
@@ -25,26 +60,6 @@ handl_backend/
 ├── .env.example
 ├── README.md
 ├── package.json
-```
-
-## 🧑‍💻 Getting Started
-
-### Prerequisites
-
-- PostgreSQL database
-- Node.js (v18+)
-- `.env` file with required variables
-
-### Environment Setup
-
-Create a `.env` file in the root with the following:
-```
-PORT=5000
-SESSION_SECRET=your_secret
-DATABASE_URL=postgresql://user:pass@localhost:5432/handl
-EMAIL_USER=you@example.com
-EMAIL_PASS=yourpassword
-CLIENT_URL=http://localhost:3000
 ```
 
 ## 🛡️ Authentication
