@@ -14,12 +14,14 @@ Backend repository for **Handl**, a collaborative full-stack shopping list web a
 ## 📂 Project Structure
 
 ```plaintext
-src/
-├── config/         # DB and email configuration
-├── controllers/    # Express route handlers
-├── middleware/     # Auth, error handling
-├── routes/         # API endpoints
-├── services/       # Business logic
+handl_backend/
+├── src/
+|    ├── config/         # DB and email configuration
+|    ├── controllers/    # Express route handlers
+|    ├── middleware/     # Auth, error handling
+|    ├── routes/         # API endpoints
+|    ├── services/       # Business logic
+├── package.json
 ```
 
 ## 🧑‍💻 Getting Started
