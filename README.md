@@ -1,16 +1,22 @@
-# HANDL
+# Handl — Backend
 
-Backend repository for Handl. 
-A collaborative full stack shopping list web application
+Backend repository for **Handl**, a collaborative full-stack shopping list web application.
 
-## Backend Stack
-- Node.js
-- Express.js 
-- Express sessions
-- PostgreSQL database
+## ⚙️ Tech Stack
+
+- Node.js + Express
+- PostgreSQL
+- Passport (Session-based auth)
+- Nodemailer
+- SSE (Server-Sent Events for real-time updates)
 - REST API
 
-## Libraries
-- passport.js
-- bcrypt
-- crypto
+## 📂 Project Structure
+
+```plaintext
+src/
+├── config/         # DB and email configuration
+├── controllers/    # Express route handlers
+├── middleware/     # Auth, error handling
+├── routes/         # API endpoints
+├── services/       # Business logic
