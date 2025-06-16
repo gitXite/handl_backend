@@ -21,6 +21,9 @@ handl_backend/
 |    ├── middleware/     # Auth, error handling
 |    ├── routes/         # API endpoints
 |    ├── services/       # Business logic
+|    ├── index.js        # Entry point
+├── .env.example
+├── README.md
 ├── package.json
 ```
 
