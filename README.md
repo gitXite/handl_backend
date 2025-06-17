@@ -77,5 +77,4 @@ Be sure to use secure cookies and HTTPS in production
 Configure CORS and sessions properly with frontend origin
 
 ## 📄 License
-
-This project is licensed under the [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) license — non-commercial use only.
+MIT
