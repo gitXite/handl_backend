@@ -1,7 +1,7 @@
 # Handl — Backend
 ## //IN PROGRESS//
 
-Backend repository for **Handl**, a full-stack collaborative shopping list web application.
+Backend repository for **Handl**, a full-stack web app that helps users create, manage, and share shopping lists in real time. Whether you're planning groceries solo or coordinating with family, HANDL keeps everything in sync across devices. 
 
 ## ⚙️ Tech Stack
 
