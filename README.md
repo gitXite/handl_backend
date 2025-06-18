@@ -76,5 +76,3 @@ Be sure to use secure cookies and HTTPS in production
 
 Configure CORS and sessions properly with frontend origin
 
-## 📄 License
-MIT
